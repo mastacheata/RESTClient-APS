@@ -5,17 +5,17 @@
   <RDF:Description RDF:about="rdf:#$ll2uD1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="30.0"
-                   em:maxVersion="35.0" />
+                   em:maxVersion="40.0" />
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:creator="Chao Zhou; chao@zhou.fr"
                    em:contributor="Paul Gear; gear54rus@gmail.com"
                    em:description="RESTClient-APS, modified RESTClient with APS development functionality."
                    em:homepageURL="http://doc.apsstandard.org"
-                   em:id="{ad0d925d-88f8-47f1-85ea-8463569e756e}"
+                   em:id="restclient-aps@gear54.me"
                    em:name="RESTClient APS"
                    em:unpack="true"
                    em:type="2">
     <em:targetApplication RDF:resource="rdf:#$ll2uD1"/>
-    <em:version>2.1.1</em:version>
+    <em:version>2.1.0</em:version>
   </RDF:Description>
 </RDF:RDF>

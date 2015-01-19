@@ -1,6 +1,6 @@
 #!/bin/sh
 
-XPI="restclient.xpi"
+XPI="restclient-aps.xpi"
 rm -rf XPI
 # Copy base structure to a temporary build directory and change to it
 echo "Creating working directory ..."
