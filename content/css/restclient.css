@@ -99,7 +99,33 @@ a { cursor: pointer; }
   font-weight: normal !important;
   margin-top: 8px;
 }
-
+/* aps section style sheet */
+#aps .well {
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 18px;
+}
+#aps form {
+  margin-bottom: 8px;
+}
+#aps label {
+  margin-right: 4px;
+}
+#aps button {
+  margin-left: 2px;
+}
+#poa-api-url {
+  border-radius: 3px;
+  margin: 0 auto; 
+}
+#poa-api-user {
+  border-radius: 3px;
+  margin: 0 auto; 
+}
+#poa-api-password {
+  border-radius: 3px;
+  margin: 0 auto; 
+}
 /* response section style sheet */
 #response {
   margin-top: 18px;
@@ -229,13 +255,13 @@ span.header-value {
   margin-top: 7px;
 }
 #request-method {
-  border-radius: 3px 0 3px 0;
+  border-radius: 3px;
   border-right: none;
   width: 94px;
   margin: 0 auto; 
 }
 #request-url {
-  border-radius: 3px 0 3px 0;
+  border-radius: 3px;
   border-right: none;
   margin: 0 auto; 
 }
