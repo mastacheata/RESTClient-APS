@@ -45,7 +45,8 @@ restclient.main = {
     rep3:     '3',
     rep4:     '4',
     toggleRequest: 'alt+q',
-    toggleResponse: 'alt+s',
+    toggleAPS: 'alt+a',
+    toggleResponse: 'alt+s',    
     back: 'left',
     forward: 'right',
     escape: 'esc'
@@ -97,6 +98,7 @@ restclient.main = {
 
     $('.favorite-icon').click(restclient.main.favoriteUrl);
     $('.toggle-request').click(restclient.main.toggleRequest);
+    $('.toggle-aps').click(restclient.main.toggleAPS);
     $('.toggle-response').click(restclient.main.toggleResponse);
     $('.toggle-curl').click(restclient.main.toggleCurl);
     $('.enable-curl').click(restclient.main.enableCurl);
@@ -303,6 +305,10 @@ restclient.main = {
       restclient.main.toggleRequest();
       return false;
     });
+    $(document).bind('keydown', restclient.main.hotkey.toggleAPS, function () {
+      restclient.main.toggleAPS();
+      return false;
+    });
     $(document).bind('keydown', restclient.main.hotkey.toggleResponse, function () {
       restclient.main.toggleResponse();
       return false;
@@ -345,6 +351,14 @@ restclient.main = {
     });
     if (e) e.preventDefault();
     return false;
+  },
+  toggleAPS: function (e) {
+    var toggle = $('.toggle-aps');
+    $('#aps-container').slideToggle('slow', function () {
+        toggle.text(toggle.text() == '-' ? '+' : '-');
+    });
+    if (e) e.preventDefault();
+    return false; 
   },
   toggleResponse: function (e) {
     var toggle = $('.toggle-response');
