@@ -26,11 +26,12 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * ***** END LICENSE BLOCK ***** */
 
-"use strict";
+'use strict';
 
 restclient.aps = {
-	token: {
-		value: null,
-		created: null
-	}
+  apiCallBody: null,
+  lastFetch: null,
+  showMsg: function(message, type) {
+    $('#aps-msg-container').css('color', type ? 'red' : 'green').text(message);
+  }
 };

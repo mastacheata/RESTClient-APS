@@ -65,10 +65,9 @@ restclient.main = {
     this.initModal();
     this.initOAuthWindow();
     this.initRequestMethod();
-    this.initRequestUrl();
+    this.initRequestUrl();    
     this.updateFavoriteHeadersMenu();
     this.updateFavoriteRequestMenu();
-
 
     $('#request-button').bind('click', restclient.main.sendRequest);
     $('#request-url').bind('keyup', restclient.main.requestUrlInputed).focus().select();
@@ -119,10 +118,11 @@ restclient.main = {
       restclient.error('#modal-oauth-view .btnRefresh refreshed:' + headerId);
       $('#modal-oauth-view').data('source-header-id', headerId);
       $('#modal-oauth-view textarea').val($('span[data-header-id="' + headerId + '"]').attr('header-value'));
-    });
+    });    
     
     window.onhashchange = restclient.main.hashChange;
     restclient.main.hashChange();
+    this.initAPS();
   },
   initEvents: function(){
     $('#bm-sidebar-inner a.favorite').live('click', restclient.bookmark.toggleFavorite);
@@ -1562,6 +1562,57 @@ restclient.main = {
       return true;
     }
     return false;
+  },
+  initAPS: function () {
+    var eAPIUrl = $('#poa-api-url'),
+        eAPIUser = $('#poa-api-user'),
+        eAPIPass = $('#poa-api-password'),
+        eTokenType = $('#aps-token-type'),
+        eParams = $('#aps-token-type-params'),
+        eToken = $('#aps-token'),
+        eRefreshToken = $('#aps-token-refresh-button'),
+        inputs = $([eAPIUrl[0], eAPIUser[0], eAPIPass[0], eTokenType[0], eParams[0], eToken[0], eRefreshToken[0]]),
+        a = document.createElement('a'),
+        apiMethods = {
+          'getAccountToken': [
+            'account_id[, subscription_id]',
+            function(input) {
+              var body = atob(''),
+                  match = input.match(/\d+/g);
+              if (!match) {
+                restclient.aps.showMsg('Unable to parse \'account_id\'', true);
+                return;
+              }
+            }
+          ],
+          'getUserToken': [
+            'user_id',
+            function(input) {
+              var body = atob(''),
+                  match = input.match(/\d+/);
+              if (!match) {
+                  restclient.aps.showMsg('Unable to parse \'user_id\'', true);
+                  return;
+              }
+              body.replace('USER_ID', parseInt(match[0], 10));
+              return body;
+            }
+          ]
+        };
+    $('#request-url').change(function() {
+      if (this.value && this.validity.valid) {
+        a.href = this.value;
+        eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
+      }
+    }).change();
+    $('input[type=radio][name="aps-mode"]').change(function() {
+      inputs.prop('disabled', !parseInt(this.value));
+    });
+    eTokenType.change(function(){
+      var method = apiMethods[this.value];
+      eParams.attr('placeholder', method[0]);
+      restclient.aps.apiCallBody = method[1];
+    }).change();
   },
   initOAuthWindow: function () {
     var auto_oauth_timestamp    = $('#oauth-setting [name="auto_oauth_timestamp"]'),

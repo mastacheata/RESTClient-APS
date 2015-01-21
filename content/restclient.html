@@ -155,9 +155,9 @@
   <div id="aps-container">
     <div id="aps-form" class="well">
       <form action="" class="form-inline" style="margin-bottom: 0px" method="POST" onsubmit="return false;">
-        <label style="margin: 5px 5px; width: 75px;">APS mode</label>
-        <label><input type="radio" name="aps-mode" value="0" style="margin: 0 5px;" checked>Disabled</label>
-        <label><input type="radio" name="aps-mode" value="1" style="margin: 0 5px;">Manual refresh</label>
+        <label style="margin: 5px 5px; width: 75px;">APS Mode</label>
+        <label><input type="radio" name="aps-mode" value="0" style="margin: 0 5px;">Disabled</label>
+        <label><input type="radio" name="aps-mode" value="1" style="margin: 0 5px;" checked>Manual refresh</label>
         <label><input type="radio" name="aps-mode" value="2" style="margin: 0 5px;">Refresh every 15 mins</label>
         <label><input type="radio" name="aps-mode" value="3" style="margin: 0 5px;">Refresh when 403</label>
         <br/>
@@ -168,16 +168,18 @@
         <label style="margin: 0 5px 0 15px; width: 55px;">Password</label>
         <input id="poa-api-password" name="poa-api-password" type="password" style="margin: 0 auto; width: 150px;" placeholder="password">
         <br/>
-        <label style="margin: 5px; width: 75px;">Token type</label>
-        <input style="margin: 5px 0; width: 115px;" id="aps-token-type" type="text" data-provide="typeahead" data-items="4" data-source=""><span style="width: 20px; padding: 4px; margin: 0 0 0 -2px" class="request-method-dropdown dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="request-method-icon icon-chevron-down"></i></a>
-          <ul id="request-method-list" class="dropdown-menu">
-          </ul>
-        </span>
+        <label style="margin: 5px; width: 75px;">Token Type</label>
+        <select id="aps-token-type" name="aps-token-type" style="margin: 5px 0; width: 160px;">
+          <option value="getAccountToken">Account[, Subscription]</option>
+          <option value="getUserToken">Service User</option>
+        </select>
+        <label style="margin: 5px; width: 78px;">Parameter(s)</label>
+        <input id="aps-token-type-params" name="aps-token-type-params" type="text" autocomplete="on" style="margin: 0 auto; width: 200px">
         <br/>
         <label style="margin: 0 5px; width: 75px;">APS Token</label>
         <input id="aps-token" name="aps-token" type="text" style="width: -moz-calc(100% - 255px);" placeholder="Base64 string">
         <button id="aps-token-refresh-button" class="btn btn-danger" style="margin: 0 0 0 15px; padding: 4px 15px;">REFRESH TOKEN</button>
+        <span id="aps-msg-container" style="margin-left: 87px; font-weight: bold;"></span>
       </form>
     </div>
   </div>
