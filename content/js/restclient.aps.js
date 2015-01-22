@@ -32,6 +32,9 @@ restclient.aps = {
   apiCallBody: null,
   lastFetch: null,
   showMsg: function(message, type) {
-    $('#aps-msg-container').css('color', type ? 'red' : 'green').text(message);
+    $('#aps-msg-container').css('color', type ? 'red' : 'green').text(moment().format('[[]HH:mm:ss[]] ') + message);
+  },
+  refreshToken: function(done, fail) {
+    var xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest);
   }
 };

@@ -1613,6 +1613,7 @@ restclient.main = {
       eParams.attr('placeholder', method[0]);
       restclient.aps.apiCallBody = method[1];
     }).change();
+    eRefreshToken.click(restclient.aps.refreshToken);    
   },
   initOAuthWindow: function () {
     var auto_oauth_timestamp    = $('#oauth-setting [name="auto_oauth_timestamp"]'),
@@ -2019,7 +2020,7 @@ restclient.main = {
       restclient.message.show({
         id: 'alertInvalidRequestUrl',
         type: 'error',
-        title: 'The request URL is invalidate',
+        title: 'The request URL is invalid',
         message: 'Please check your request URL!',
         buttons: [
           {title: 'Okay', class: 'btn-danger', callback: function () { $('#request-url').focus().select(); $('#alertInvalidRequestUrl').alert('close');  }}
