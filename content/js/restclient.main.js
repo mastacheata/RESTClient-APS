@@ -974,7 +974,7 @@ restclient.main = {
           request.log(e);
         }
       }
-    });
+    });    
     request.headers = headers;
     return request;
   },
@@ -1577,43 +1577,81 @@ restclient.main = {
           'getAccountToken': [
             'account_id[, subscription_id]',
             function(input) {
-              var body = atob(''),
-                  match = input.match(/\d+/g);
+              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFjY291bnRUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFjY291bnRfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5BQ0NPVU5UX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+                match = input.match(/\d+/g);
               if (!match) {
                 restclient.aps.showMsg('Unable to parse \'account_id\'', true);
                 return;
               }
+              return body.replace('ACCOUNT_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
             }
           ],
           'getUserToken': [
-            'user_id',
+            'user_id[, subscription_id]',
             function(input) {
-              var body = atob(''),
-                  match = input.match(/\d+/);
+              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFVzZXJUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPnVzZXJfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5VU0VSX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+                match = input.match(/\d+/);
               if (!match) {
-                  restclient.aps.showMsg('Unable to parse \'user_id\'', true);
-                  return;
+                restclient.aps.showMsg('Unable to parse \'user_id\'', true);
+                return;
               }
-              body.replace('USER_ID', parseInt(match[0], 10));
-              return body;
+              return body.replace('USER_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
             }
-          ]
+          ],
+          'getApplicationInstanceToken': [
+            'application_instance_id',
+            function(input) {
+              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFwcGxpY2F0aW9uSW5zdGFuY2VUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFwcGxpY2F0aW9uX2luc3RhbmNlX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+QVBQTElDQVRJT05fSU5TVEFOQ0VfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+                match = input.match(/\d+/);
+              if (!match) {
+                restclient.aps.showMsg('Unable to parse \'application_instance_id\'', true);
+                return;
+              }
+              return body.replace('APPLICATION_INSTANCE_ID', parseInt(match[0], 10));
+            }
+          ],
+          'getSubscriptionToken': [
+            'subscription_id',
+            function(input) {
+              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFN1YnNjcmlwdGlvblRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c3Vic2NyaXB0aW9uX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+U1VCU0NSSVBUSU9OX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgIDwvc3RydWN0PgogICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgIDwvcGFyYW0+CiAgICA8L3BhcmFtcz4KPC9tZXRob2RDYWxsPgo='),
+                match = input.match(/\d+/);
+              if (!match) {
+                restclient.aps.showMsg('Unable to parse \'subscription_id\'', true);
+                return;
+              }
+              return body.replace('SUBSCRIPTION_ID', parseInt(match[0], 10));
+            }
+          ],
+          'getServiceTemplateToken': [
+            'service_template_id',
+            function(input) {
+              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFNlcnZpY2VUZW1wbGF0ZVRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c2VydmljZV90ZW1wbGF0ZV9pZDwvbmFtZT4KICAgICAgICAgICAgICAgICAgICAgICAgPHZhbHVlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGk0PlNFUlZJQ0VfVEVNUExBVEVfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+                match = input.match(/\d+/);
+              if (!match) {
+                restclient.aps.showMsg('Unable to parse \'service_template_id\'', true);
+                return;
+              }
+              return body.replace('SERVICE_TEMPLATE_ID', parseInt(match[0], 10));
+            }
+          ]          
         };
-    $('#request-url').change(function() {
-      if (this.value && this.validity.valid) {
-        a.href = this.value;
-        eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
-      }
-    }).change();
-    $('input[type=radio][name="aps-mode"]').change(function() {
-      inputs.prop('disabled', !parseInt(this.value));
-    });
-    eTokenType.change(function(){
-      var method = apiMethods[this.value];
-      eParams.attr('placeholder', method[0]);
-      restclient.aps.apiCallBody = method[1];
-    }).change();
-    eRefreshToken.click(restclient.aps.refreshToken);    
+      $('#request-url').change(function() {
+        if (this.value && this.validity.valid) {
+          a.href = this.value;
+          eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
+        }
+      }).change();
+      $('input[type=radio][name="aps-mode"]').change(function() {
+        inputs.prop('disabled', !parseInt(this.value));
+      });
+      eTokenType.change(function() {
+        var method = apiMethods[this.value];
+        eParams.attr('placeholder', method[0]);
+        restclient.aps.apiCallBody = method[1];
+      }).change();
+      eRefreshToken.click(function() {
+        restclient.aps.refreshToken();
+      });
   },
   initOAuthWindow: function () {
     var auto_oauth_timestamp    = $('#oauth-setting [name="auto_oauth_timestamp"]'),
@@ -2011,9 +2049,6 @@ restclient.main = {
       //restclient.log('resigned');
     }
     var request = restclient.main.getRequest();
-    
-    if($('#curl').is(':visible'))
-      restclient.main.updateCurlCommand();
 
     if (!restclient.helper.validateUrl(request.url))
     {
@@ -2041,8 +2076,32 @@ restclient.main = {
       //TODO alert unable to save history to sqlite
       restclient.error('unable to save history to cache.');
     }
-    
-    restclient.http.sendRequest(request.method, request.url, request.headers, request.overrideMimeType, request.body);
+
+    var APSMode = parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10);
+    switch (APSMode) {
+      case 1:
+        send(true);
+        break;
+      case 2:
+        if (!restclient.aps.lastFetch || (moment().subtract(25, 'minutes') > restclient.aps.lastFetch))
+          restclient.aps.refreshToken(function() {
+            send(true);
+          });
+        else
+          send(true);
+        break;
+      default:
+        send();
+        break;
+    }
+
+    function send(addAPSToken) {
+      if (addAPSToken)
+        request.headers.push(['APS-Token', $('#aps-token').val()]);
+      if($('#curl').is(':visible'))
+        restclient.main.updateCurlCommand();
+      restclient.http.sendRequest(request.method, request.url, request.headers, request.overrideMimeType, request.body);
+    }
   },
   donate: function () {
     $('#paypal_donate').submit();

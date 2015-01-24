@@ -31,16 +31,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 restclient.http = {
   mimeType : false,
   methods: ['GET','POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'TRACE', 'CONNECT'],
-  sendRequest: function(requestMethod, requestUrl, requestHeaders, mimeType, requestBody) {
+  sendRequest: function(requestMethod, requestUrl, requestHeaders, mimeType, requestBody, callbacks) {
     try{
-      restclient.main.updateProgressBar(100);
-      restclient.main.showResponse();
+      restclient.main.updateProgressBar(100);      
       restclient.http.mimeType = mimeType;
       //restclient.log(requestMethod);
       var xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest);
-      xhr.onerror = restclient.http.onerror;
-      xhr.onload = restclient.http.onload;
-      xhr.onprogress = restclient.http.onprogress;
+      xhr.onerror = callbacks ? callbacks.onerror : restclient.http.onerror;
+      xhr.onload = callbacks ? callbacks.onload : restclient.http.onload;
+      xhr.onprogress = callbacks ? callbacks.onprogress : restclient.http.onprogress;
       
       xhr.open(requestMethod, requestUrl, true);
       xhr.setRequestHeader("Accept-Language", null);
@@ -75,15 +74,14 @@ restclient.http = {
     }
   },
   onprogress: function(evt) {
-    //restclient.log(evt.position * 100 / evt.totalSize + "," + evt.position + "," + evt.totalSize);
-    var percentComplete = evt.position * 100 / evt.totalSize;
-    restclient.main.updateProgressBar(percentComplete, 'Receving data...');
-    if(evt.position == evt.totalSize)
+    restclient.main.updateProgressBar(evt.loaded * 100 / evt.total, 'Receving data...');
+    if(evt.loaded == evt.total)
       restclient.main.updateProgressBar(-1, 'Sending data...');
   },
   onerror: function(xhr) {
     restclient.main.clearResult();
     restclient.main.updateProgressBar(-1);
+    restclient.main.showResponse();
     restclient.main.setResponseHeader({"Error": "Could not connect to server"}, false);
   },
   onload: function(xhr) {
@@ -137,14 +135,11 @@ restclient.http = {
     // handle a zero length body
     if(xhr.responseText.length == 0) {
       displayHandler = 'displayImageRaw';
-    }
-    
-    //restclient.log(displayHandler);
-    //restclient.log(contentType);
+    }    
     restclient.main.checkMimeType.apply(restclient.http, []);
     restclient.main[displayHandler].apply(restclient.http, []);
-    
     restclient.main.updateProgressBar(-1);
+    restclient.main.showResponse();
   },
   abortRequest: function(){
     if(!restclient.http.xhr)

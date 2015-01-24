@@ -25,7 +25,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * ***** END LICENSE BLOCK ***** */
-
+ 
 'use strict';
 
 restclient.aps = {
@@ -35,6 +35,41 @@ restclient.aps = {
     $('#aps-msg-container').css('color', type ? 'red' : 'green').text(moment().format('[[]HH:mm:ss[]] ') + message);
   },
   refreshToken: function(done, fail) {
-    var xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest);
+    var eAPIUrl = $('#poa-api-url'),
+      eAPIUser = $('#poa-api-user'),
+      eAPIPass = $('#poa-api-password'),
+      eParams = $('#aps-token-type-params'),
+      eToken = $('#aps-token'),
+      headers = [],
+      body = restclient.aps.apiCallBody(eParams.val());
+    if (!body)
+      return;
+    if (eAPIUser.val()) {
+      headers.push(['Authorization', 'Basic ' + btoa(eAPIUser.val() + ':' + eAPIPass.val()).replace(/.{76}(?=.)/g, '$&\n')]);
+    }
+    restclient.http.sendRequest('POST', eAPIUrl.val(), headers, 'text/xml', body, {
+      onprogress: restclient.http.onprogress,
+      onload: function() {
+        var response = $(this.responseXML);
+        if (this.status !== 200) {
+          restclient.aps.showMsg('POA API says: ' + this.status + ' ' + this.statusText, true);
+        } else if (response.find('name:contains("error_message")').length) {
+          restclient.aps.showMsg('POA API says: ' + response.find('name:contains("error_message") + value > string').text(), true);
+        } else {
+          eToken.val(response.find('name:contains("aps_token") + value > string').text());
+          restclient.aps.showMsg('New token acquired!');
+          restclient.aps.lastFetch = moment();
+        }
+        restclient.main.updateProgressBar(-1);
+        if (done)
+          done();
+      },
+      onerror: function() {
+        restclient.aps.showMsg('POA API says: ' + this.status + ' ' + this.statusText, true);
+        restclient.main.updateProgressBar(-1);
+        if (fail)
+          fail();
+      }
+    });
   }
 };

@@ -32,10 +32,13 @@ restclient.curl = {
   constructCommand: function(request){
     var curl = 'curl';
     if(typeof request.headers !== 'undefined') {
-      var headersStrings = "";
+      var headersStrings = "";      
+
       for(var i=0, header; header = request.headers[i]; i++) {
         headersStrings += " -H '"+ header[0] + ':' + header[1] + "'";
       }
+      if (parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10))
+        headersStrings += ' -H \'APS-Token:' + $('#aps-token').val() + '\'';
       curl += ' -i ' + headersStrings;
     }
     if(typeof request.method !== 'undefined')
