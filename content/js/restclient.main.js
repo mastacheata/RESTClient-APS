@@ -1637,8 +1637,10 @@ restclient.main = {
         };
       $('#request-url').change(function() {
         if (this.value && this.validity.valid) {
+          var oldHost = a.hostname;
           a.href = this.value;
-          eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
+          if (a.hostname !== oldHost)
+            eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
         }
       }).change();
       $('input[type=radio][name="aps-mode"]').change(function() {
