@@ -3,7 +3,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:type>2</em:type>
         <em:id>restclient-aps@gear54.me</em:id>
-        <em:version>1.0</em:version>
+        <em:version>1.1</em:version>
         <em:targetApplication>
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
@@ -12,7 +12,7 @@
             </Description>
         </em:targetApplication>
         <em:name>RESTClient APS</em:name>
-        <em:homepageURL>http://doc.apsstandard.org</em:homepageURL>
+        <em:homepageURL>https://github.com/gear54rus/RESTClient-APS</em:homepageURL>
         <em:description>RESTClient-APS, modified RESTClient with APS development functionality</em:description>
         <em:creator>Paul Gear; gear54rus@gmail.com</em:creator>
         <em:developer>Chao Zhou; chao@zhou.fr</em:developer>
