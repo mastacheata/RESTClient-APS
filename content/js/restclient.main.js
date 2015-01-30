@@ -96,7 +96,10 @@ restclient.main = {
       $(this).select();
     });
 
-    $('#request-body, #curl-command').autosize();
+    if (restclient.getPref('taAutosize')) {
+      $('#request-body, #curl-command').autosize().trigger('autosize.resize');
+      $('.toggle-ta-autosize').attr('data-ta-autosize', 'enabled').text('Disable Textarea Autoresize');
+    }
 
     $('.favorite-icon').click(restclient.main.favoriteUrl);
     $('.toggle-request').click(restclient.main.toggleRequest);
@@ -106,6 +109,7 @@ restclient.main = {
     $('.enable-curl').click(restclient.main.enableCurl);
     $('.toggle-header-layout').click(restclient.main.toggleRequestHeaderLayout);
     $('.toggle-request-timer').click(restclient.main.toggleRequestTimer);
+    $('.toggle-ta-autosize').click(restclient.main.toggleTAAutosize);    
     $('.clear-cached-requests').click(restclient.main.clearCachedRequests);
 
     $('#modal-oauth-view .btnAutoRefresh').bind('click', function () {
@@ -439,6 +443,17 @@ restclient.main = {
       $(this).text('Enable request execution timer');
       restclient.setPref('requestTimer', false);
     }
+  },
+  toggleTAAutosize: function() {
+    var e = $(this),
+        ta = $('#request-body, #curl-command'),
+        state = e.attr('data-ta-autosize') == 'enabled';
+    e.attr('data-ta-autosize', state ? 'disabled' : 'enabled').text((state ? 'Enable' : 'Disable') + ' Textarea Autoresize');
+    restclient.setPref('taAutosize', !state);
+    if (state)
+      ta.trigger('autosize.destroy')
+    else
+      ta.autosize().trigger('autosize.resize');
   },
   toggleRequestHistoryPanel: function() {
     if( $('#request-history-dropdown').is(':hidden') )

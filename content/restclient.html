@@ -75,6 +75,7 @@
               <li class="nav-header">Develop</li>
               <li><a style="cursor:pointer" class="enable-curl" data-curl="disabled">Enable Curl</a></li>
               <li><a style="cursor:pointer" class="toggle-request-timer" data-timer="disabled">Enable Request Execution Timer</a></li>
+              <li><a style="cursor:pointer" class="toggle-ta-autosize" data-ta-autosize="disabled">Enable Textarea Autoresize</a></li>
               <li><a style="cursor:pointer" class="clear-cached-requests">Clear Cached Requests</a></li>
               <li class="divider"></li>
               <li class="nav-header">Skins (bootswatch.com)</li>
@@ -145,7 +146,7 @@
     
     <section class="well" style="margin-bottom:0px;">
       <h4 style="margin-left: 6px;">Body</h4>
-      <textarea id="request-body" style="width: 99%;margin: 0;height: 60px;" placeholder="Request Body"></textarea>
+      <textarea id="request-body" style="width: 99%;margin: 0;height: 60px;resize: vertical;" placeholder="Request Body"></textarea>
     </section>
   </div>
 </section>
@@ -222,7 +223,7 @@
   <div id="curl-container">
     <div style="margin-bottom:0px;" class="well">
       <h4 style="margin-left: 6px;">Command</h4>
-      <textarea placeholder="Curl" style="width: 99%;margin: 0;height: 40px;" id="curl-command" rel="tooltip" title="hotkey: c"></textarea>
+      <textarea placeholder="Curl" style="width: 99%;margin: 0;height: 40px;resize: vertical;" id="curl-command" rel="tooltip" title="hotkey: c"></textarea>
     </div>
   </div>
 </section>
@@ -329,7 +330,7 @@
       <div class="control-group">
         <label class="control-label" for="saved-curl">Curl Command</label>
         <div class="controls">
-          <textarea name="saved-curl" rows="3" class="span3" readonly></textarea>
+          <textarea name="saved-curl" rows="3" class="span3" style="resize: vertical;" readonly></textarea>
         </div>
       </div>
       <div class="control-group">
