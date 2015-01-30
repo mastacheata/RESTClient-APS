@@ -36,7 +36,7 @@ restclient.main = {
   ignoreHashChange: false,
   currentTheme: null,
   hotkey: {
-    send:     's',
+    send:     'ctrl+return',
     url:      'u',
     method:   'm',
     reqBody:  'b',
