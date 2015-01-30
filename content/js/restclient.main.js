@@ -96,6 +96,8 @@ restclient.main = {
       $(this).select();
     });
 
+    $('#request-body, #curl-command').autosize();
+
     $('.favorite-icon').click(restclient.main.favoriteUrl);
     $('.toggle-request').click(restclient.main.toggleRequest);
     $('.toggle-aps').click(restclient.main.toggleAPS);
@@ -2045,7 +2047,7 @@ restclient.main = {
   },
   updateCurlCommand: function() {
     var request = restclient.main.getRequest();
-    $("#curl-command").val(restclient.curl.constructCommand(request));
+    $("#curl-command").val(restclient.curl.constructCommand(request)).trigger('autosize.resize');
   },
   sendRequest: function () {
     $('.popover').removeClass('in').remove();
