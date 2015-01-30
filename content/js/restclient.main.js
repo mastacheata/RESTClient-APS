@@ -70,8 +70,9 @@ restclient.main = {
     this.updateFavoriteRequestMenu();
 
     $('#request-button').bind('click', restclient.main.sendRequest);
-    $('#request-url').bind('keyup', restclient.main.requestUrlInputed).focus().select();
+    $('#request-url').bind('keyup', restclient.main.requestURLKeyUP).focus().select();
     $('#request-url').bind('change', restclient.main.updateFavoriteUrlIcon);
+    $('#request-body').bind('keyup', restclient.main.requestBodyKeyUP);
     $('#request-history-dropdown-close').bind('click', restclient.main.toggleRequestHistoryPanel);
     if ($('#overrideMimeType').attr('checked') == 'checked')
       $('.overrideMimeType').show();
@@ -517,17 +518,20 @@ restclient.main = {
       $(this).addClass('icon-star-empty').removeClass('icon-star');
     }
   },
-  requestUrlInputed: function (evt) {
-    if (evt.keyCode == 13) {
+  requestURLKeyUP: function (evt) {
+    if (evt.keyCode == 13 && evt.ctrlKey) {
+      $('#request-button').click();
+      return false;
+    } else {
+      var url = $(this).val();
+      restclient.main.updateFavoriteUrlIcon(url);
+    }
+  },
+  requestBodyKeyUP: function (evt) {
+    if (evt.keyCode == 13 && evt.ctrlKey) {
       $('#request-button').click();
       return false;
     }
-    else{
-      var url = $(this).val();// + String.fromCharCode(evt.keyCode);
-      //restclient.log(url);
-      restclient.main.updateFavoriteUrlIcon(url);
-    }
-
   },
   processScroll: function () {
     var scrollTop = $(window).scrollTop();
