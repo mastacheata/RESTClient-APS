@@ -20,6 +20,9 @@ find . -depth -name 'test*' -exec rm -rf "{}" \;
 find . -depth -name '.DS_Store' -exec rm -rf "{}" \;
 find . -depth -name '*.test.js' -exec rm -rf "{}" \;
 
+echo "Writing version ..."
+sed -i "s/versionNumber = \"\"/versionNumber = \"$(grep '<em:version>' install.rdf | sed 's/^.*n>\(.\+\)<\/e.*$/\1/')\"/" content/js/restclient.overlay.js
+
 echo "Creating $XPI ..."
 zip -qr9DX "../$XPI" *
 
