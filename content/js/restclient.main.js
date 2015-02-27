@@ -1673,6 +1673,9 @@ restclient.main = {
         restclient.aps.apiCallBody = method[1];
         restclient.aps.lastFetch = null;
       }).change();
+      eParams.change(function() {
+        restclient.aps.lastFetch = null;
+      });
       eParams.val('1');
       eRefreshToken.click(function() {
         restclient.aps.refreshToken();
