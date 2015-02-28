@@ -43,26 +43,11 @@ restclient.overlay = {
                            .getInterface(Components.interfaces.nsIDOMWindow);
     return mainWindow.gBrowser;
   },
-  /*transferToLocalStorage: function() {
-    var names = [ 'OAuth.setting', 'OAuth.sign', 'OAuth2.authorize.ignoreWarning', 'basicAuth', 'cachedUrls', 'defaultSkin', 
-                  'favoriteHeaders', 'firstRunDone', 'imageWarning', 'oauth2.templates', 'oauth2.tokens', 'pageLayout', 'requestHeaderLayout', 
-                  'requestTimer', 'savedRequest', 'sign-warning', 'version'];
-    for(var i = 0, name; name = names[i]; i++) {
-      var value = restclient.Preferences.get("extension.restclient." + name, '');
-      localStorage.setItem(name, value);
-    }
-  },*/
   firstRun : function() {
     var firstRunPref  = "firstRunDone",
         versionPref   = "version",
-        versionNumber = "2.1.0",
+        versionNumber = "",
         browser       = restclient.overlay.getBrowser();
-
-    /*try{ 
-      localStorage.getItem('version');
-    }catch(e) {
-      restclient.transferToLocalStorage();
-    }*/
     
     if(!restclient.getPref(firstRunPref, false))
     {
@@ -74,7 +59,6 @@ restclient.overlay = {
       restclient.setPref(firstRunPref, true);
     }
     if(restclient.getPref(versionPref, '') != versionNumber) {
-      browser.selectedTab = browser.addTab("http://www.restclient.net/?browser=firefox&version=" + versionNumber);
       restclient.setPref(versionPref, versionNumber);
       restclient.setPref('defaultSkin', 'simplex');
       //Migrate favorite requests from preference to sqlite.
