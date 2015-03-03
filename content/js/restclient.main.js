@@ -53,6 +53,7 @@ restclient.main = {
   },
   init: function () {
     restclient.init();
+    restclient.autoupdate.check();
     restclient.sqlite.open();
     
     this.initEvents();

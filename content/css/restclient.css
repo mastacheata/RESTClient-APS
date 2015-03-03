@@ -118,6 +118,13 @@ a { cursor: pointer; }
   border-radius: 3px;
   margin: 0 auto; 
 }
+
+/*auto-update mechanisms styles*/
+
+#autoupdate-menu li.nav-header {
+  text-transform: none;
+}
+
 /* response section style sheet */
 #response {
   margin-top: 18px;

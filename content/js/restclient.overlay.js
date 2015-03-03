@@ -60,7 +60,7 @@ restclient.overlay = {
     }
     if(restclient.getPref(versionPref, '') != versionNumber) {
       restclient.setPref(versionPref, versionNumber);
-      restclient.setPref('defaultSkin', 'simplex');
+      restclient.setPref('defaultSkin', 'cerulean');
       //Migrate favorite requests from preference to sqlite.
       restclient.sqlite.migrateFavoriteRequest();
     }

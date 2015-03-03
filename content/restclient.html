@@ -66,7 +66,15 @@
           </li>
         </ul>
         <ul class="nav pull-right">
-          <a id="autoupdate-menu" class="dropdown-toggle" data-toggle="dropdown" href="#">Update available!</a>
+          <li id="autoupdate-menu" class="dropdown hidden">
+            <a class="dropdown-toggle" data-toggle="dropdown">Update Available</a>
+            <ul class="dropdown-menu">
+              <li class="nav-header"></li>
+              <li><a target="_blank">Go To Release Page</a></li>
+              <li class="divider"></li>
+              <li><a>Skip This Version</a></li>
+            </ul>
+          </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings <b class="caret"></b></a>
             <ul class="dropdown-menu">
@@ -760,6 +768,7 @@
 <script type="text/javascript" src="js/moment-with-langs.js"></script>
 
 <script type="text/javascript" src="js/restclient.js"></script>
+<script type="text/javascript" src="js/vercmp.js"></script>
 <script type="text/javascript" src="js/restclient.main.js"></script>
 <script type="text/javascript" src="js/restclient.autoupdate.js"></script>
 <script type="text/javascript" src="js/restclient.oauth.js"></script>
