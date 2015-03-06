@@ -166,6 +166,8 @@ restclient.main = {
       {
         restclient.error(e);
       }
+      //restclient.main.updateCurlCommand(); 
+      //restclient.main.updateCurlTokenCommand();
       restclient.main.clearResult();
       window.scrollTo(0,0);
     }
