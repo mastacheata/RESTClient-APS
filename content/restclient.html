@@ -341,7 +341,13 @@
       <div class="control-group">
         <label class="control-label" for="saved-curl">cURL Command</label>
         <div class="controls">
-          <textarea name="saved-curl" rows="3" class="span3" style="resize: vertical;" readonly></textarea>
+          <textarea name="saved-curl" rows="5" class="span3" style="resize: vertical;" readonly></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="saved-token-curl">cURL Token Command</label>
+        <div class="controls">
+          <textarea name="saved-token-curl" rows="5" class="span3" style="resize: vertical;" readonly></textarea>
         </div>
       </div>
       <div class="control-group">
@@ -736,11 +742,13 @@
   <a href="#" class="removeBookmark bookmark-button"><i class="fa fa-trash-o"></i></a>
   <div class="bookmark-title bookmark-details">
     <a href="#" class="favorite" data-favorite="<%= item.favorite %>"><i class="fa fa-star<% if(item.favorite == 0) { %>-o <% } %>"></i></a> 
-    <a href="#" class="requestName"><%= item.requestName %></a> <span class="lastAccess"><%= moment.unix(item.lastAccess / 1000).fromNow() %></span>
+    <b class="requestName"><%= item.requestName %></b> <a href="#" class="restore">[Restore]</a> <a href="#" class="restoreAPS">[+APS]</a> <span class="lastAccess"><%= moment.unix(item.lastAccess / 1000).fromNow() %></span>
   </div>
   <div class="bookmark-details"><span class="bookmark-label"><%= item.requestMethod %></span> <span class="bookmark-value"><%= item.requestUrl %></span></div>
   <div class="bookmark-details"><span class="bookmark-label">cURL Command:</span></div>
-  <div class="bookmark-details curl"><span class="bookmark-value"> <%= item.curl %> </span></div>
+  <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.curl %> </span></div>
+  <div class="bookmark-details"><span class="bookmark-label">cURL Token Command:</span></div>
+  <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.tokenCurl %> </span></div>
   <div class="bookmark-details labels"><span class="bookmark-label">Labels:</span> 
   <% if(item.labels.length == 0) { %>
     <span class="label">uncategorized</span>

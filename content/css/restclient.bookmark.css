@@ -53,6 +53,7 @@
   margin: 5px 0;
 }
 #bm-requests div.curl {
+  overflow: auto;
   margin-left: 30px;
 }
 #bm-requests span.bookmark-label {

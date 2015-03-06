@@ -38,6 +38,7 @@ restclient.sqlite = {
                 requestMethod TEXT NOT NULL, \
                 request TEXT NOT NULL, \
                 curl TEXT NOT NULL, \
+                tokenCurl TEXT NOT NULL, \
                 creationTime INTEGER NOT NULL, \
                 lastAccess INTEGER NOT NULL",
     labels: " labelName TEXT NOT NULL, \
@@ -61,7 +62,7 @@ restclient.sqlite = {
     getRequestsByName: 'SELECT * FROM requests WHERE requestName = :requestName',
     getRequestsByLabels: 'SELECT * FROM requests WHERE uuid IN (SELECT uuid FROM labels WHERE labelName IN (placeholder) group by uuid having count(uuid) = :num) ORDER BY creationTime DESC, lastAccess DESC',
     getRequestByUUID: 'SELECT * FROM requests WHERE uuid = :uuid',
-    newRequests: 'INSERT INTO requests (uuid, requestName, favorite, requestUrl, requestMethod, request, curl, creationTime, lastAccess) VALUES (:uuid, :requestName, :favorite, :requestUrl, :requestMethod, :request, :curl, :creationTime, :lastAccess)',
+    newRequests: 'INSERT INTO requests (uuid, requestName, favorite, requestUrl, requestMethod, request, curl, tokenCurl, creationTime, lastAccess) VALUES (:uuid, :requestName, :favorite, :requestUrl, :requestMethod, :request, :curl, :tokenCurl, :creationTime, :lastAccess)',
     findRequestsByKeyword: 'SELECT * FROM requests WHERE requestName LIKE :word OR requestUrl LIKE :word ORDER BY favorite DESC, lastAccess DESC',
     findRequestsByLabels: 'SELECT * FROM requests WHERE uuid IN (SELECT uuid FROM labels WHERE labelName IN (placeholder) group by uuid having count(uuid) = :num) ORDER BY favorite DESC, lastAccess DESC',
     findRequests: 'SELECT * FROM requests ORDER BY favorite DESC, lastAccess DESC',
@@ -233,6 +234,7 @@ restclient.sqlite = {
         request.requestMethod = stmt.row.requestMethod;
         request.request = stmt.row.request;
         request.curl = stmt.row.curl;
+        request.tokenCurl = stmt.row.tokenCurl;
         request.creationTime = stmt.row.creationTime;
         request.lastAccess = stmt.row.lastAccess;
         return request;
@@ -251,7 +253,8 @@ restclient.sqlite = {
     favorite = favorite || 0;
     labels = labels || [];
     labels = _.uniq(labels);
-    var curl = restclient.curl.constructCommand(request);
+    var curl = restclient.curl.constructCommand(request),
+        tokenCurl = restclient.curl.constructTokenCommand(request.aps);
     try{
       var stmt = restclient.sqlite.getStatement('newRequests');
       var params = stmt.newBindingParamsArray(),
@@ -264,6 +267,7 @@ restclient.sqlite = {
       binding.bindByName("requestMethod", request.method);
       binding.bindByName("request", JSON.stringify(request));
       binding.bindByName("curl", curl);
+      binding.bindByName("tokenCurl", tokenCurl);
       binding.bindByName("creationTime", creationTime);
       binding.bindByName("lastAccess", creationTime);
     
@@ -530,6 +534,7 @@ restclient.sqlite = {
         request.requestMethod = stmt.row.requestMethod;
         request.request = stmt.row.request;
         request.curl = stmt.row.curl;
+        request.tokenCurl = stmt.row.tokenCurl;
         request.creationTime = stmt.row.creationTime;
         request.lastAccess = stmt.row.lastAccess;
         var labels = restclient.sqlite.getLabelsByUUID(request.uuid);

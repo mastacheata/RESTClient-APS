@@ -74,15 +74,11 @@ restclient.bookmark = {
     $('.bookmark-sidebar-scrollbar .scrollbar-slider').css('height', sliderHeight).css('top', sliderTop);
   },
   scrollWindow: function(event){
-    //restclient.bookmark.initScrollbarSize();
     if( restclient.bookmark.scrollProcessing )
       return false;
     restclient.bookmark.scrollProcessing = true;
-    //console.log($('#bm-sidebar-inner').scrollTop());
-    //console.log($('#bm-requests').height() + $('#bm-labels').height() + $('#bm-footer').height() - $('#bm-sidebar-inner').height() - 400);
     if ($('#bm-sidebar-inner').scrollTop() >= $('#bm-requests').height() + $('#bm-labels').height() + $('#bm-footer').height() - $('#bm-sidebar-inner').height() - 400){
       var num = $('#bm-requests li[data-uuid]').length;
-      //console.log(num);
       var requestNum = parseInt($('#bm-requests .requestNum').text());
       if(num < requestNum)
       {
@@ -219,7 +215,6 @@ restclient.bookmark = {
     
     var templateHtml = $('#bookmarkRequest').html();
     var template = _.template(templateHtml, {items: requests});
-    
     $('.bookmark-requests').append(template);
   },
   toggleFavorite: function(e) {
@@ -235,16 +230,13 @@ restclient.bookmark = {
     return false;
   },
   applyRequest: function(){
-    var uuid = $(this).parents('li').attr('data-uuid');
-    var request = _.where(restclient.bookmark.cachedRequests, {uuid: uuid});
+    var e = $(this),
+        uuid = e.parents('li').attr('data-uuid'),
+        request = _.where(restclient.bookmark.cachedRequests, {uuid: uuid});
     if(request.length > 0) {
-      //console.log(request[0].request);
-      restclient.main.applyRequest(request[0].request);
+      restclient.main.applyRequest(request[0].request, e.hasClass('restore') ? false : true);
       restclient.bookmark.unload();
     }
     return false;
   }
 };
-
-//window.addEventListener("load", function () { restclient.bookmark.init();  }, false);
-//window.addEventListener("unload", function () { restclient.bookmark.unload(); }, false);

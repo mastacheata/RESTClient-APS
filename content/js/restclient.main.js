@@ -138,7 +138,7 @@ restclient.main = {
     $('#bm-sidebar-inner a.favorite').live('click', restclient.bookmark.toggleFavorite);
     $('#bm-labels span.edit').on('click', restclient.bookmark.clickLabelEdit);
     $('#bm-sidebar-inner .removeBookmark').live('click', restclient.bookmark.clickRemoveBookmark);
-    $('#bm-sidebar-inner .requestName').live('click', restclient.bookmark.applyRequest);
+    $('#bm-sidebar-inner .restore, #bm-sidebar-inner .restoreAPS').live('click', restclient.bookmark.applyRequest);
     $('#bm-sidebar-inner .close').on('click', restclient.bookmark.unload);
     $('#bm-sidebar-inner').bind('scroll', restclient.bookmark.scrollWindow);
     $('#bm-sidebar-inner .bm-top').bind('click', restclient.bookmark.scrollToTop);
@@ -661,8 +661,8 @@ restclient.main = {
       }
       
       var request = restclient.main.getRequest();
-      var curl = restclient.curl.constructCommand(request);
-      $('#modal-bookmark-request [name="saved-curl"]').val(curl);
+      $('#modal-bookmark-request [name="saved-curl"]').val(restclient.curl.constructCommand(request));
+      $('#modal-bookmark-request [name="saved-token-curl"]').val(restclient.curl.constructTokenCommand(request.aps));
     }).on('hide', function() {
       $('#modal-bookmark-request [name="saved-request-name"]').val('');
       $('#modal-bookmark-request [name="saved-request-label"]').tagsinput('removeAll');
@@ -1483,9 +1483,7 @@ restclient.main = {
     return false;
   },
   manageFavoriteRequests: function () {
-    //$('#bookmark-sidebar').load("chrome://restclient/content/bookmarks.html", function(){
       restclient.bookmark.init();
-      //});
   },
   getFavoriteRequestHtml: function (id, name, request) {
     var group = $('<div class="accordion-group"></div>'),
