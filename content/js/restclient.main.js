@@ -98,7 +98,7 @@ restclient.main = {
     });
 
     if (restclient.getPref('taAutosize')) {
-      $('#request-body, #curl-command').autosize().trigger('autosize.resize');
+      $('#request-body, #curl-command, #curl-token-command').autosize().trigger('autosize.resize');
       $('.toggle-ta-autosize').attr('data-ta-autosize', 'enabled').text('Disable Textarea Autoresize');
     }
 
@@ -447,7 +447,7 @@ restclient.main = {
   },
   toggleTAAutosize: function() {
     var e = $(this),
-        ta = $('#request-body, #curl-command'),
+        ta = $('#request-body, #curl-command, #curl-token-command'),
         state = e.attr('data-ta-autosize') == 'enabled';
     e.attr('data-ta-autosize', state ? 'disabled' : 'enabled').text((state ? 'Enable' : 'Disable') + ' Textarea Autoresize');
     restclient.setPref('taAutosize', !state);
@@ -998,6 +998,15 @@ restclient.main = {
       }
     });    
     request.headers = headers;
+    request.aps = {
+      mode: parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10),
+      url: $.trim($('#poa-api-url').val()),
+      user: $.trim($('#poa-api-user').val()),
+      password: $.trim($('#poa-api-password').val()),
+      type: $('#aps-token-type').val(),
+      parameters: $.trim($('#aps-token-type-params').val()),
+      token: $.trim($('#aps-token').val())
+    };
     return request;
   },
   wrapText: function (str, len) {
@@ -1594,69 +1603,7 @@ restclient.main = {
         eToken = $('#aps-token'),
         eRefreshToken = $('#aps-token-refresh-button'),
         inputs = $([eAPIUrl[0], eAPIUser[0], eAPIPass[0], eTokenType[0], eParams[0], eToken[0], eRefreshToken[0]]),
-        a = document.createElement('a'),
-        apiMethods = {
-          'getAccountToken': [
-            'account_id[, subscription_id]',
-            function(input) {
-              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFjY291bnRUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFjY291bnRfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5BQ0NPVU5UX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
-                match = input.match(/\d+/g);
-              if (!match) {
-                restclient.aps.showMsg('Unable to parse \'account_id\'', true);
-                return;
-              }
-              return body.replace('ACCOUNT_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
-            }
-          ],
-          'getUserToken': [
-            'user_id[, subscription_id]',
-            function(input) {
-              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFVzZXJUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPnVzZXJfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5VU0VSX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
-                match = input.match(/\d+/);
-              if (!match) {
-                restclient.aps.showMsg('Unable to parse \'user_id\'', true);
-                return;
-              }
-              return body.replace('USER_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
-            }
-          ],
-          'getApplicationInstanceToken': [
-            'application_instance_id',
-            function(input) {
-              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFwcGxpY2F0aW9uSW5zdGFuY2VUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFwcGxpY2F0aW9uX2luc3RhbmNlX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+QVBQTElDQVRJT05fSU5TVEFOQ0VfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
-                match = input.match(/\d+/);
-              if (!match) {
-                restclient.aps.showMsg('Unable to parse \'application_instance_id\'', true);
-                return;
-              }
-              return body.replace('APPLICATION_INSTANCE_ID', parseInt(match[0], 10));
-            }
-          ],
-          'getSubscriptionToken': [
-            'subscription_id',
-            function(input) {
-              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFN1YnNjcmlwdGlvblRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c3Vic2NyaXB0aW9uX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+U1VCU0NSSVBUSU9OX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgIDwvc3RydWN0PgogICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgIDwvcGFyYW0+CiAgICA8L3BhcmFtcz4KPC9tZXRob2RDYWxsPgo='),
-                match = input.match(/\d+/);
-              if (!match) {
-                restclient.aps.showMsg('Unable to parse \'subscription_id\'', true);
-                return;
-              }
-              return body.replace('SUBSCRIPTION_ID', parseInt(match[0], 10));
-            }
-          ],
-          'getServiceTemplateToken': [
-            'service_template_id',
-            function(input) {
-              var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFNlcnZpY2VUZW1wbGF0ZVRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c2VydmljZV90ZW1wbGF0ZV9pZDwvbmFtZT4KICAgICAgICAgICAgICAgICAgICAgICAgPHZhbHVlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGk0PlNFUlZJQ0VfVEVNUExBVEVfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
-                match = input.match(/\d+/);
-              if (!match) {
-                restclient.aps.showMsg('Unable to parse \'service_template_id\'', true);
-                return;
-              }
-              return body.replace('SERVICE_TEMPLATE_ID', parseInt(match[0], 10));
-            }
-          ]          
-        };
+        a = document.createElement('a');
       $('#request-url').change(function() {
         if (this.value && this.validity.valid) {
           var oldHost = a.hostname;
@@ -1669,7 +1616,7 @@ restclient.main = {
         inputs.prop('disabled', !parseInt(this.value));
       });
       eTokenType.change(function() {
-        var method = apiMethods[this.value];
+        var method = restclient.aps.apiMethods[this.value];
         eParams.attr('placeholder', method[0]);
         restclient.aps.apiCallBody = method[1];
         restclient.aps.lastFetch = null;
@@ -2066,8 +2013,10 @@ restclient.main = {
     }
   },
   updateCurlCommand: function() {
-    var request = restclient.main.getRequest();
-    $("#curl-command").val(restclient.curl.constructCommand(request)).trigger('autosize.resize');
+    $("#curl-command").val(restclient.curl.constructCommand(restclient.main.getRequest())).trigger('autosize.resize');
+  },
+  updateCurlTokenCommand: function() {
+    $("#curl-token-command").val(restclient.curl.constructTokenCommand(restclient.main.getRequest().aps)).trigger('autosize.resize');
   },
   sendRequest: function () {
     $('.popover').removeClass('in').remove();
@@ -2106,8 +2055,7 @@ restclient.main = {
       restclient.error('unable to save history to cache.');
     }
 
-    var APSMode = parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10);
-    switch (APSMode) {
+    switch (request.aps.mode) {
       case 1:
         send(true);
         break;
@@ -2125,8 +2073,10 @@ restclient.main = {
     }
 
     function send(addAPSToken) {
-      if (addAPSToken)
-        request.headers.push(['APS-Token', $('#aps-token').val()]);
+      if (addAPSToken) {
+        restclient.main.removeHttpRequestHeaderByName('APS-Token');
+        request.headers.push(['APS-Token', request.aps.token]);
+      }
       if($('#curl').is(':visible'))
         restclient.main.updateCurlCommand();
       restclient.http.sendRequest(request.method, request.url, request.headers, request.overrideMimeType, request.body);

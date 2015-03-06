@@ -31,6 +31,68 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 restclient.aps = {
   apiCallBody: null,
   lastFetch: null,
+  apiMethods: {
+    'getAccountToken': [
+      'account_id[, subscription_id]',
+      function(input) {
+        var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFjY291bnRUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFjY291bnRfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5BQ0NPVU5UX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+          match = input.match(/\d+/g);
+        if (!match) {
+          restclient.aps.showMsg('Unable to parse \'account_id\'', true);
+          return;
+        }
+        return body.replace('ACCOUNT_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
+      }
+    ],
+    'getUserToken': [
+      'user_id[, subscription_id]',
+      function(input) {
+        var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFVzZXJUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPnVzZXJfaWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5VU0VSX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgICAgICA8bWVtYmVyPgogICAgICAgICAgICAgICAgICAgICAgICA8bmFtZT5zdWJzY3JpcHRpb25faWQ8L25hbWU+CiAgICAgICAgICAgICAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpND5TVUJTQ1JJUFRJT05fSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+          match = input.match(/\d+/);
+        if (!match) {
+          restclient.aps.showMsg('Unable to parse \'user_id\'', true);
+          return;
+        }
+        return body.replace('USER_ID', parseInt(match[0], 10)).replace('SUBSCRIPTION_ID', match[1] ? parseInt(match[1], 10) : 0);
+      }
+    ],
+    'getApplicationInstanceToken': [
+      'application_instance_id',
+      function(input) {
+        var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldEFwcGxpY2F0aW9uSW5zdGFuY2VUb2tlbjwvbWV0aG9kTmFtZT4KICAgIDxwYXJhbXM+CiAgICAgICAgPHBhcmFtPgogICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICA8c3RydWN0PgogICAgICAgICAgICAgICAgICAgIDxtZW1iZXI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxuYW1lPmFwcGxpY2F0aW9uX2luc3RhbmNlX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+QVBQTElDQVRJT05fSU5TVEFOQ0VfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+          match = input.match(/\d+/);
+        if (!match) {
+          restclient.aps.showMsg('Unable to parse \'application_instance_id\'', true);
+          return;
+        }
+        return body.replace('APPLICATION_INSTANCE_ID', parseInt(match[0], 10));
+      }
+    ],
+    'getSubscriptionToken': [
+      'subscription_id',
+      function(input) {
+        var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFN1YnNjcmlwdGlvblRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c3Vic2NyaXB0aW9uX2lkPC9uYW1lPgogICAgICAgICAgICAgICAgICAgICAgICA8dmFsdWU+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aTQ+U1VCU0NSSVBUSU9OX0lEPC9pND4KICAgICAgICAgICAgICAgICAgICAgICAgPC92YWx1ZT4KICAgICAgICAgICAgICAgICAgICA8L21lbWJlcj4KICAgICAgICAgICAgICAgIDwvc3RydWN0PgogICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgIDwvcGFyYW0+CiAgICA8L3BhcmFtcz4KPC9tZXRob2RDYWxsPgo='),
+          match = input.match(/\d+/);
+        if (!match) {
+          restclient.aps.showMsg('Unable to parse \'subscription_id\'', true);
+          return;
+        }
+        return body.replace('SUBSCRIPTION_ID', parseInt(match[0], 10));
+      }
+    ],
+    'getServiceTemplateToken': [
+      'service_template_id',
+      function(input) {
+        var body = atob('PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1ldGhvZENhbGw+CiAgICA8bWV0aG9kTmFtZT5wZW0uQVBTLmdldFNlcnZpY2VUZW1wbGF0ZVRva2VuPC9tZXRob2ROYW1lPgogICAgPHBhcmFtcz4KICAgICAgICA8cGFyYW0+CiAgICAgICAgICAgIDx2YWx1ZT4KICAgICAgICAgICAgICAgIDxzdHJ1Y3Q+CiAgICAgICAgICAgICAgICAgICAgPG1lbWJlcj4KICAgICAgICAgICAgICAgICAgICAgICAgPG5hbWU+c2VydmljZV90ZW1wbGF0ZV9pZDwvbmFtZT4KICAgICAgICAgICAgICAgICAgICAgICAgPHZhbHVlPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGk0PlNFUlZJQ0VfVEVNUExBVEVfSUQ8L2k0PgogICAgICAgICAgICAgICAgICAgICAgICA8L3ZhbHVlPgogICAgICAgICAgICAgICAgICAgIDwvbWVtYmVyPgogICAgICAgICAgICAgICAgPC9zdHJ1Y3Q+CiAgICAgICAgICAgIDwvdmFsdWU+CiAgICAgICAgPC9wYXJhbT4KICAgIDwvcGFyYW1zPgo8L21ldGhvZENhbGw+Cg=='),
+          match = input.match(/\d+/);
+        if (!match) {
+          restclient.aps.showMsg('Unable to parse \'service_template_id\'', true);
+          return;
+        }
+        return body.replace('SERVICE_TEMPLATE_ID', parseInt(match[0], 10));
+      }
+    ]
+  },
   showMsg: function(message, type) {
     $('#aps-msg-container').css('color', type ? 'red' : 'green').text(moment().format('[[]HH:mm:ss[]] ') + message);
   },
@@ -47,6 +109,7 @@ restclient.aps = {
     if (eAPIUser.val()) {
       headers.push(['Authorization', 'Basic ' + btoa(eAPIUser.val() + ':' + eAPIPass.val()).replace(/.{76}(?=.)/g, '$&\n')]);
     }
+    restclient.main.updateCurlTokenCommand();
     restclient.http.sendRequest('POST', eAPIUrl.val(), headers, 'text/xml', body, {
       onprogress: restclient.http.onprogress,
       onload: function() {

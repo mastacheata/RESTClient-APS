@@ -29,29 +29,34 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "use strict";
 
 restclient.curl = {
-  constructCommand: function(request){
+  constructCommand: function(request) {
     var curl = 'curl';
-    if(typeof request.headers !== 'undefined') {
-      var headersStrings = "";      
 
-      for(var i=0, header; header = request.headers[i]; i++) {
-        headersStrings += " -H '"+ header[0] + ':' + header[1] + "'";
+    if (typeof request.method !== 'undefined')
+      curl += ' -X ' + request.method;
+
+    if (typeof request.headers !== 'undefined') {
+      var headersStrings = '';
+
+      for (var i = 0, header; header = request.headers[i]; i++) {
+        headersStrings += " -H '" + header[0] + ':' + header[1] + "'";
       }
-      if (parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10))
+      if (request.aps.mode)
         headersStrings += ' -H \'APS-Token:' + $('#aps-token').val() + '\'';
       curl += ' -i ' + headersStrings;
-    }
-    if(typeof request.method !== 'undefined')
-      curl += ' -X ' + request.method;
-      
-    if(typeof request.body !== 'undefined' && request.body !== '') {
+    }    
+
+    if (typeof request.body !== 'undefined' && request.body !== '') {
       curl += " -d '" + request.body + "' ";
       //TODO escape special chars
     }
-    
-    if(typeof request.url !== 'undefined') {
+
+    if (typeof request.url !== 'undefined') {
       curl += " '" + request.url + "'";
     }
     return curl;
+  },
+  constructTokenCommand: function(aps) {
+    return 'curl -X POST ' + (aps.user ? ('--user \'' + aps.user + ':' + aps.password + '\'') : '') + ' -d \'' + restclient.aps.apiMethods[aps.type][1](aps.parameters) + '\' \'' + aps.url + '\' 2>/dev/null|tail -n1|sed \'s/^.*aps_token<\\/name><value><string>\\([^<]\\+\\).*$/\\1/\'';
   }
 }
