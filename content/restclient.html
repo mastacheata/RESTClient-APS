@@ -61,7 +61,7 @@
             <ul class="dropdown-menu">
               <li><a style="cursor:pointer" onclick="restclient.main.showRequest();return false;" class="request-menu" >Request</a></li>
               <li><a style="cursor:pointer" onclick="restclient.main.showResponse();return false;">Response</a></li>
-              <li><a style="cursor:pointer" onclick="restclient.main.showCurl();return false;" class="curl-menu">Curl</a></li>
+              <li><a style="cursor:pointer" onclick="restclient.main.showCurl();return false;" class="curl-menu">cURL</a></li>
             </ul>
           </li>
         </ul>
@@ -82,7 +82,7 @@
               <li><a style="cursor:pointer" class="toggle-header-layout" data-layout="tag">List Request Headers in Table</a></li>
               <li class="divider"></li>
               <li class="nav-header">Develop</li>
-              <li><a style="cursor:pointer" class="enable-curl" data-curl="disabled">Enable Curl</a></li>
+              <li><a style="cursor:pointer" class="enable-curl" data-curl="disabled">Enable cURL</a></li>
               <li><a style="cursor:pointer" class="toggle-request-timer" data-timer="disabled">Enable Request Execution Timer</a></li>
               <li><a style="cursor:pointer" class="toggle-ta-autosize" data-ta-autosize="disabled">Enable Textarea Autoresize</a></li>
               <li><a style="cursor:pointer" class="clear-cached-requests">Clear Cached Requests</a></li>
@@ -339,7 +339,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="saved-curl">Curl Command</label>
+        <label class="control-label" for="saved-curl">cURL Command</label>
         <div class="controls">
           <textarea name="saved-curl" rows="3" class="span3" style="resize: vertical;" readonly></textarea>
         </div>
@@ -739,7 +739,7 @@
     <a href="#" class="requestName"><%= item.requestName %></a> <span class="lastAccess"><%= moment.unix(item.lastAccess / 1000).fromNow() %></span>
   </div>
   <div class="bookmark-details"><span class="bookmark-label"><%= item.requestMethod %></span> <span class="bookmark-value"><%= item.requestUrl %></span></div>
-  <div class="bookmark-details"><span class="bookmark-label">Curl Command:</span></div>
+  <div class="bookmark-details"><span class="bookmark-label">cURL Command:</span></div>
   <div class="bookmark-details curl"><span class="bookmark-value"> <%= item.curl %> </span></div>
   <div class="bookmark-details labels"><span class="bookmark-label">Labels:</span> 
   <% if(item.labels.length == 0) { %>
