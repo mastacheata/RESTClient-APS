@@ -69,6 +69,7 @@ restclient.main = {
     this.initRequestUrl();    
     this.updateFavoriteHeadersMenu();
     this.updateFavoriteRequestMenu();
+    this.initAPS();
 
     $('#request-button').bind('click', restclient.main.sendRequest);
     $('#request-url').bind('keyup', restclient.main.requestURLKeyUP).focus().select();
@@ -97,8 +98,10 @@ restclient.main = {
       $(this).select();
     });
 
+    $('#curl-command, #curl-token-command').val('');  
+
     if (restclient.getPref('taAutosize')) {
-      $('#request-body, #curl-command, #curl-token-command').autosize().trigger('autosize.resize');
+      $('#request-body, #curl-command, #curl-token-command').autosize();
       $('.toggle-ta-autosize').attr('data-ta-autosize', 'enabled').text('Disable Textarea Autoresize');
     }
 
@@ -126,11 +129,10 @@ restclient.main = {
       restclient.error('#modal-oauth-view .btnRefresh refreshed:' + headerId);
       $('#modal-oauth-view').data('source-header-id', headerId);
       $('#modal-oauth-view textarea').val($('span[data-header-id="' + headerId + '"]').attr('header-value'));
-    });    
-    
+    });
+
     window.onhashchange = restclient.main.hashChange;
-    restclient.main.hashChange();
-    this.initAPS();
+    restclient.main.hashChange();    
   },
   initEvents: function(){
     $('#bm-sidebar-inner a.favorite').live('click', restclient.bookmark.toggleFavorite);
@@ -383,6 +385,7 @@ restclient.main = {
         $('.enable-curl').text('Disable Curl');
         $('.curl-menu').show();
         restclient.main.updateCurlCommand();
+        restclient.main.updateCurlTokenCommand();
         restclient.setPref('enableCurl', true);
       }
       else
@@ -455,6 +458,10 @@ restclient.main = {
       ta.trigger('autosize.destroy')
     else
       ta.autosize().trigger('autosize.resize');
+  },
+  triggerTAAutosize: function() {
+    if ($('a[data-ta-autosize]').attr('data-ta-autosize') === 'enabled')
+      $('#request-body, #curl-command, #curl-token-command').trigger('autosize.resize');
   },
   toggleRequestHistoryPanel: function() {
     if( $('#request-history-dropdown').is(':hidden') )
@@ -1532,13 +1539,13 @@ restclient.main = {
     }
     return false;
   },
-  applyRequest: function (request) {
+  applyRequest: function (request, aps) {
     if(typeof request === 'string')
       request = JSON.parse(request);
     $('#request-body').val('');
     $('#request-url').val('');
     $('#request-method').val('GET');
-    restclient.main.removeHttpRequestHeaders();
+    restclient.main.removeHttpRequestHeaders();  
 
     if (typeof request.method == 'string') {
       $('#request-method').val(request.method.toUpperCase());
@@ -1580,6 +1587,16 @@ restclient.main = {
           else
             restclient.main.addHttpRequestHeader(header[0], header[1]);
     }
+    if (aps !== false) {
+      $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').attr('checked', true).trigger('change');
+      $('#poa-api-url').val(request.aps.url);
+      $('#poa-api-user').val(request.aps.user);
+      $('#poa-api-password').val(request.aps.password);
+      $('#aps-token-type').val(request.aps.type);
+      $('#aps-token-type-params').val(request.aps.parameters);
+      $('#aps-token').val(request.aps.token);
+    }
+    restclient.main.triggerTAAutosize();
     return true;
   },
   applyFavoriteRequest: function (name) {
@@ -1613,7 +1630,7 @@ restclient.main = {
         }
       }).change();
       $('input[type=radio][name="aps-mode"]').change(function() {
-        inputs.prop('disabled', !parseInt(this.value));
+        inputs.attr('disabled', !parseInt(this.value));
       });
       eTokenType.change(function() {
         var method = restclient.aps.apiMethods[this.value];
@@ -2062,6 +2079,7 @@ restclient.main = {
       case 2:
         if (!restclient.aps.lastFetch || (moment().subtract(25, 'minutes') > restclient.aps.lastFetch))
           restclient.aps.refreshToken(function() {
+            request.aps.token = $.trim($('#aps-token').val());
             send(true);
           });
         else
