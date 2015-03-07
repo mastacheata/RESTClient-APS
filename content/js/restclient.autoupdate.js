@@ -33,8 +33,7 @@ restclient.autoupdate = {
     var xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest),
       ghUrl = 'https://api.github.com',
       currentVersion = restclient.getPref('version'),
-      skippedVersion = restclient.getPref('skippedVersion'),
-      vercmp = restclient.vercmp;
+      skippedVersion = restclient.getPref('skippedVersion');
 
     xhr.open('GET', ghUrl + '/gists/7ccf8b58f1c5e55347dd', true);
     xhr.onload = function(e) {
@@ -45,7 +44,7 @@ restclient.autoupdate = {
         e = e.target;
         var release = JSON.parse(e.responseText),
           newVersion = release.tag_name.slice(1);
-        if (vercmp(newVersion, '> ' + currentVersion, '> ' + (skippedVersion || 0))) {
+        if (restclient.helper.vercmp(newVersion, '> ' + currentVersion, '> ' + (skippedVersion || 0))) {
           var eMenu = $('#autoupdate-menu'),
             eInnerMenu = eMenu.children('ul'),
             eBtnMenu = eMenu.children('a');

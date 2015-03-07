@@ -43,26 +43,38 @@ restclient.overlay = {
                            .getInterface(Components.interfaces.nsIDOMWindow);
     return mainWindow.gBrowser;
   },
-  firstRun : function() {
-    var firstRunPref  = "firstRunDone",
-        versionPref   = "version",
-        versionNumber = "",
-        browser       = restclient.overlay.getBrowser();
-    
-    if(!restclient.getPref(firstRunPref, false))
-    {
-      var navbar = document.getElementById("nav-bar");
-      var newset = navbar.currentSet + ',restclient-navbar-button';
+  firstRun: function() {
+    var versionNumber = "",
+      currentVersion = restclient.getPref('version', '');
+
+    if (versionNumber != currentVersion) { //install/upgrade
+      for (var k in restclient.overlay.upgrades) {   
+        if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
+          restclient.overlay.upgrades[k]();
+          break;
+        }
+      }
+      restclient.setPref('version', versionNumber);
+    }
+  },
+  upgrades: {
+    '': function() { //clean install
+      var navbar = document.getElementById("nav-bar"),
+        newset = navbar.currentSet + ',restclient-navbar-button';
       navbar.currentSet = newset;
       navbar.setAttribute("currentset", newset );
       document.persist("nav-bar", "currentset");
-      restclient.setPref(firstRunPref, true);
-    }
-    if(restclient.getPref(versionPref, '') != versionNumber) {
-      restclient.setPref(versionPref, versionNumber);
       restclient.setPref('defaultSkin', 'cerulean');
-      //Migrate favorite requests from preference to sqlite.
-      restclient.sqlite.migrateFavoriteRequest();
+      restclient.setPref('enableCurl', true);
+      restclient.setPref('taAutosize', true);
+      restclient.setPref('requestTimer', true);
+    },
+    '2.1.0': function() { //RESTClient versioning
+      restclient.deletePref('firstRunDone');
+      restclient.sqlite.open();
+      restclient.sqlite.db.executeSimpleSQL('DROP TABLE requests');
+      restclient.sqlite.db.createTable('requests', restclient.sqlite.tables['requests']);
+      restclient.sqlite.close();
     }
   },
   open: function(){

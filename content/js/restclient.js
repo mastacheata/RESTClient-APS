@@ -48,6 +48,9 @@ if (typeof (restclient) === "undefined") {
     getPref : function (name, value) {
       return restclient.Preferences.get("extension.restclient." + name, value);
     },
+    deletePref : function (name, value) {
+      return restclient.Preferences.reset("extension.restclient." + name);
+    },
     i18n : function (n, arg) {
         i18nStrings = new restclient.StringBundle("chrome://restclient/locale/restclient.properties");
       try {
