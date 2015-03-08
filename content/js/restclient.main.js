@@ -115,6 +115,8 @@ restclient.main = {
     $('.toggle-request-timer').click(restclient.main.toggleRequestTimer);
     $('.toggle-ta-autosize').click(restclient.main.toggleTAAutosize);    
     $('.clear-cached-requests').click(restclient.main.clearCachedRequests);
+    $('h4 ~ #curl-command').prev().children('a').click(restclient.main.updateCurlCommand);
+    $('h4 ~ #curl-token-command').prev().children('a').click(restclient.main.updateCurlTokenCommand);
 
     $('#modal-oauth-view .btnAutoRefresh').bind('click', function () {
       var headerId = $('#modal-oauth-view').data('source-header-id');
