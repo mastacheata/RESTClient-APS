@@ -48,7 +48,7 @@ restclient.overlay = {
       currentVersion = restclient.getPref('version', '');
 
     if (versionNumber != currentVersion) { //install/upgrade
-      for (var k in restclient.overlay.upgrades) {   
+      for (var k in restclient.overlay.upgrades) {
         if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
           restclient.overlay.upgrades[k]();
           break;
@@ -62,7 +62,7 @@ restclient.overlay = {
       var navbar = document.getElementById("nav-bar"),
         newset = navbar.currentSet + ',restclient-navbar-button';
       navbar.currentSet = newset;
-      navbar.setAttribute("currentset", newset );
+      navbar.setAttribute("currentset", newset);
       document.persist("nav-bar", "currentset");
       restclient.setPref('defaultSkin', 'cerulean');
       restclient.setPref('enableCurl', true);
@@ -70,7 +70,7 @@ restclient.overlay = {
       restclient.setPref('requestTimer', true);
     },
     '2.1.0': function() { //RESTClient versioning
-      restclient.deletePref('firstRunDone');      
+      restclient.deletePref('firstRunDone');
       restclient.sqlite.open();
       var stmt = restclient.sqlite.db.createStatement('SELECT * FROM requests'),
         requests = [];
@@ -88,39 +88,21 @@ restclient.overlay = {
         });
       }
       stmt.reset();
-      console.error(requests);
+      restclient.helper.loadScript('chrome://restclient/content/js/underscore.js');
       restclient.helper.loadScript('chrome://restclient/content/js/restclient.curl.js');
       restclient.helper.loadScript('chrome://restclient/content/js/restclient.aps.js');
       restclient.sqlite.db.executeSimpleSQL('DROP TABLE requests');
       restclient.sqlite.db.createTable('requests', restclient.sqlite.tables['requests']);
-      stmt = restclient.sqlite.getStatement('newRequests');
-      var params = stmt.newBindingParamsArray(),
-        binding = params.newBindingParams(),
-        a = document.createElement('a'),
-        aps = {
+      var aps = {
           type: 'getAccountToken',
-          parameters: '1'
+          parameters: '1',
+          url: ':8440/RPC2'
         },
-        tmp = null;
-      requests.forEach(function (v) {
-        binding.bindByName("uuid", v.uuid);
-        binding.bindByName("requestName", v.requestName);
-        binding.bindByName("favorite", v.favorite);
-        binding.bindByName("requestUrl", v.requestUrl);
-        binding.bindByName("requestMethod", v.requestMethod);
-        a.href = v.requestUrl;
-        aps.url = a.protocol + '//' + a.hostname + ':8440/RPC2';
+        tmp;
+      requests.forEach(function(v) {
         tmp = JSON.parse(v.request);
         tmp.aps = aps;
-        binding.bindByName("request", tmp);
-        binding.bindByName("curl", v.curl);
-        binding.bindByName("tokenCurl", restclient.curl.constructTokenCommand(aps));
-        binding.bindByName("creationTime", v.creationTime);
-        binding.bindByName("lastAccess", v.lastAccess);
-        params.addParams(binding);
-        stmt.bindParameters(params);
-        stmt.execute();
-        stmt.reset();
+        restclient.sqlite.saveRequest(tmp, v.requestUrl, v.favorite);
       });
       restclient.sqlite.close();
     }
