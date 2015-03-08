@@ -70,10 +70,58 @@ restclient.overlay = {
       restclient.setPref('requestTimer', true);
     },
     '2.1.0': function() { //RESTClient versioning
-      restclient.deletePref('firstRunDone');
+      restclient.deletePref('firstRunDone');      
       restclient.sqlite.open();
+      var stmt = restclient.sqlite.db.createStatement('SELECT * FROM requests'),
+        requests = [];
+      while (stmt.executeStep()) {
+        requests.push({
+          uuid: stmt.row.uuid,
+          requestName: stmt.row.requestName,
+          favorite: stmt.row.favorite,
+          requestUrl: stmt.row.requestUrl,
+          requestMethod: stmt.row.requestMethod,
+          request: stmt.row.request,
+          curl: stmt.row.curl,
+          creationTime: stmt.row.creationTime,
+          lastAccess: stmt.row.lastAccess
+        });
+      }
+      stmt.reset();
+      console.error(requests);
+      restclient.helper.loadScript('chrome://restclient/content/js/restclient.curl.js');
+      restclient.helper.loadScript('chrome://restclient/content/js/restclient.aps.js');
       restclient.sqlite.db.executeSimpleSQL('DROP TABLE requests');
       restclient.sqlite.db.createTable('requests', restclient.sqlite.tables['requests']);
+      stmt = restclient.sqlite.getStatement('newRequests');
+      var params = stmt.newBindingParamsArray(),
+        binding = params.newBindingParams(),
+        a = document.createElement('a'),
+        aps = {
+          type: 'getAccountToken',
+          parameters: '1'
+        },
+        tmp = null;
+      requests.forEach(function (v) {
+        binding.bindByName("uuid", v.uuid);
+        binding.bindByName("requestName", v.requestName);
+        binding.bindByName("favorite", v.favorite);
+        binding.bindByName("requestUrl", v.requestUrl);
+        binding.bindByName("requestMethod", v.requestMethod);
+        a.href = v.requestUrl;
+        aps.url = a.protocol + '//' + a.hostname + ':8440/RPC2';
+        tmp = JSON.parse(v.request);
+        tmp.aps = aps;
+        binding.bindByName("request", tmp);
+        binding.bindByName("curl", v.curl);
+        binding.bindByName("tokenCurl", restclient.curl.constructTokenCommand(aps));
+        binding.bindByName("creationTime", v.creationTime);
+        binding.bindByName("lastAccess", v.lastAccess);
+        params.addParams(binding);
+        stmt.bindParameters(params);
+        stmt.execute();
+        stmt.reset();
+      });
       restclient.sqlite.close();
     }
   },

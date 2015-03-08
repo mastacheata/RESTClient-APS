@@ -69,93 +69,93 @@ restclient.helper = {
       };
   },
   //Returns true for any relative variant.
-	isRelativeUrl: function( url ) {
-		// All relative Url variants have one thing in common, no protocol.
-		return this.parseUrl( url ).protocol === "";
-	},
-	//Returns true for an absolute url.
-	isAbsoluteUrl: function( url ) {
-		return this.parseUrl( url ).protocol !== "";
-	},
-	//Turn relPath into an asbolute path. absPath is
-	//an optional absolute path which describes what
-	//relPath is relative to.
-	makePathAbsolute: function( relPath, absPath ) {
-		if ( relPath && relPath.charAt( 0 ) === "/" ) {
-			return relPath;
-		}
+  isRelativeUrl: function( url ) {
+    // All relative Url variants have one thing in common, no protocol.
+    return this.parseUrl( url ).protocol === "";
+  },
+  //Returns true for an absolute url.
+  isAbsoluteUrl: function( url ) {
+    return this.parseUrl( url ).protocol !== "";
+  },
+  //Turn relPath into an asbolute path. absPath is
+  //an optional absolute path which describes what
+  //relPath is relative to.
+  makePathAbsolute: function( relPath, absPath ) {
+    if ( relPath && relPath.charAt( 0 ) === "/" ) {
+      return relPath;
+    }
 
-		relPath = relPath || "";
-		absPath = absPath ? absPath.replace( /^\/|(\/[^\/]*|[^\/]+)$/g, "" ) : "";
+    relPath = relPath || "";
+    absPath = absPath ? absPath.replace( /^\/|(\/[^\/]*|[^\/]+)$/g, "" ) : "";
 
-		var absStack = absPath ? absPath.split( "/" ) : [],
-			relStack = relPath.split( "/" );
-		for ( var i = 0; i < relStack.length; i++ ) {
-			var d = relStack[ i ];
-			switch ( d ) {
-				case ".":
-					break;
-				case "..":
-					if ( absStack.length ) {
-						absStack.pop();
-					}
-					break;
-				default:
-					absStack.push( d );
-					break;
-			}
-		}
-		return "/" + absStack.join( "/" );
-	},
+    var absStack = absPath ? absPath.split( "/" ) : [],
+      relStack = relPath.split( "/" );
+    for ( var i = 0; i < relStack.length; i++ ) {
+      var d = relStack[ i ];
+      switch ( d ) {
+        case ".":
+          break;
+        case "..":
+          if ( absStack.length ) {
+            absStack.pop();
+          }
+          break;
+        default:
+          absStack.push( d );
+          break;
+      }
+    }
+    return "/" + absStack.join( "/" );
+  },
 
-	//Turn the specified realtive URL into an absolute one. This function
-	//can handle all relative variants (protocol, site, document, query, fragment).
-	makeUrlAbsolute: function( relUrl, absUrl ) {
-		if ( !this.isRelativeUrl( relUrl ) ) {
-			return relUrl;
-		}
+  //Turn the specified realtive URL into an absolute one. This function
+  //can handle all relative variants (protocol, site, document, query, fragment).
+  makeUrlAbsolute: function( relUrl, absUrl ) {
+    if ( !this.isRelativeUrl( relUrl ) ) {
+      return relUrl;
+    }
 
-		var relObj = this.parseUrl( relUrl ),
-			absObj = this.parseUrl( absUrl ),
-			protocol = relObj.protocol || absObj.protocol,
-			doubleSlash = relObj.protocol ? relObj.doubleSlash : ( relObj.doubleSlash || absObj.doubleSlash ),
-			authority = relObj.authority || absObj.authority,
-			hasPath = relObj.pathname !== "",
-			pathname = this.makePathAbsolute( relObj.pathname || absObj.filename, absObj.pathname ),
-			search = relObj.search || ( !hasPath && absObj.search ) || "",
-			hash = relObj.hash;
+    var relObj = this.parseUrl( relUrl ),
+      absObj = this.parseUrl( absUrl ),
+      protocol = relObj.protocol || absObj.protocol,
+      doubleSlash = relObj.protocol ? relObj.doubleSlash : ( relObj.doubleSlash || absObj.doubleSlash ),
+      authority = relObj.authority || absObj.authority,
+      hasPath = relObj.pathname !== "",
+      pathname = this.makePathAbsolute( relObj.pathname || absObj.filename, absObj.pathname ),
+      search = relObj.search || ( !hasPath && absObj.search ) || "",
+      hash = relObj.hash;
 
-		return protocol + doubleSlash + authority + pathname + search + hash;
-	},
-	setParam: function(url, name, value) {
-	  if ( !this.isAbsoluteUrl( url ) ) {
-			return url;
-		}
-		var parts = this.parseUrl(url);
-		var search = "?" + name + "=" + value;
-		if (parts.search)
-		{
-		  search = parts.search.substr(1);
-		  restclient.log(search);
-		  var found = false;
-		  var elements = search.split('&');
-		  for (var i=0, element; element = elements[i]; i++) {
-		    var keyToken = element.split('=');
-		    if(keyToken[0] === name) {
-		      elements[i] = name + "=" + value;
-		      found = true;
-		      break;
-		    }
-		  }
-		  if (!found)
-		    elements.push(name + "=" + value);
-		  
-		  search = "?" + elements.join('&');
-		}
-		
-		return parts.protocol + parts.doubleSlash + parts.authority + parts.pathname + search;
-	},
-	validateUrl: function (url) {
+    return protocol + doubleSlash + authority + pathname + search + hash;
+  },
+  setParam: function(url, name, value) {
+    if ( !this.isAbsoluteUrl( url ) ) {
+      return url;
+    }
+    var parts = this.parseUrl(url);
+    var search = "?" + name + "=" + value;
+    if (parts.search)
+    {
+      search = parts.search.substr(1);
+      restclient.log(search);
+      var found = false;
+      var elements = search.split('&');
+      for (var i=0, element; element = elements[i]; i++) {
+        var keyToken = element.split('=');
+        if(keyToken[0] === name) {
+          elements[i] = name + "=" + value;
+          found = true;
+          break;
+        }
+      }
+      if (!found)
+        elements.push(name + "=" + value);
+      
+      search = "?" + elements.join('&');
+    }
+    
+    return parts.protocol + parts.doubleSlash + parts.authority + parts.pathname + search;
+  },
+  validateUrl: function (url) {
     return this.isAbsoluteUrl(url);
   },
   sha1: function(str) {
@@ -185,24 +185,29 @@ restclient.helper = {
     return s;
   },
   vercmp: (function() {
-	  var re = /^(<|>|[=!<>]=)?\s*(\d+(?:\.\d+){0,2})([a-z][a-z0-9\-]*)?$/i;
+    var re = /^(<|>|[=!<>]=)?\s*(\d+(?:\.\d+){0,2})([a-z][a-z0-9\-]*)?$/i;
 
-	  function get_val(str, include_cmp) {
-	    var matches = (str + '').match(re);
+    function get_val(str, include_cmp) {
+      var matches = (str + '').match(re);
 
-	    return matches ? (include_cmp ? (matches[1] || '==') : '') + '"' + (matches[2] + '.0.0').match(/\d+(?:\.\d+){0,2}/)[0].replace(/(?:^|\.)(\d+)/g, function(a, b) {
-	      return Array(9 - b.length).join(0) + b;
-	    }) + (matches[3] || '~') + '"' : (include_cmp ? '==0' : 1);
-	  };
+      return matches ? (include_cmp ? (matches[1] || '==') : '') + '"' + (matches[2] + '.0.0').match(/\d+(?:\.\d+){0,2}/)[0].replace(/(?:^|\.)(\d+)/g, function(a, b) {
+        return Array(9 - b.length).join(0) + b;
+      }) + (matches[3] || '~') + '"' : (include_cmp ? '==0' : 1);
+    };
 
-	  return function(base_ver) {
-	    base_ver = get_val(base_ver);
-	    for (var arg, i = 1; arg = arguments[i++];) {
-	      if (!(new Function('return ' + base_ver + get_val(arg, 1)))()) {
-	        return false;
-	      }
-	    }
-	    return true;
-	  };
-	})()
+    return function(base_ver) {
+      base_ver = get_val(base_ver);
+      for (var arg, i = 1; arg = arguments[i++];) {
+        if (!(new Function('return ' + base_ver + get_val(arg, 1)))()) {
+          return false;
+        }
+      }
+      return true;
+    };
+  })(),
+  loadScript: function(url) {
+    return Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader).loadSubScriptWithOptions(url, {
+      ignoreCache: true
+    });
+  }
 }
