@@ -57,6 +57,6 @@ restclient.curl = {
     return curl;
   },
   constructTokenCommand: function(aps) {
-    return 'curl -X POST ' + (aps.user ? ('--user \'' + aps.user + ':' + aps.password + '\'') : '') + ' -d \'' + restclient.aps.apiMethods[aps.type][1](aps.parameters) + '\' \'' + aps.url + '\' 2>/dev/null|tail -n1|sed \'s/^.*aps_token<\\/name><value><string>\\([^<]\\+\\).*$/\\1/\'';
+    return 'curl -X POST ' + (aps.user ? ('-u \'' + aps.user + ':' + aps.password + '\'') : '') + ' -d \'' + restclient.aps.apiMethods[aps.type][1](aps.parameters) + '\' \'' + aps.url + '\' 2>/dev/null|tail -n1|sed \'s/^.*aps_token<\\/name><value><string>\\([^<]\\+\\).*$/\\1/\'';
   }
 }
