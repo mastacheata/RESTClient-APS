@@ -95,14 +95,16 @@ restclient.overlay = {
       restclient.sqlite.db.createTable('requests', restclient.sqlite.tables['requests']);
       var aps = {
           type: 'getAccountToken',
-          parameters: '1',
-          url: ':8440/RPC2'
+          parameters: '1'
         },
         tmp;
+      var a = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
       requests.forEach(function(v) {
         tmp = JSON.parse(v.request);
+        a.href = v.requestUrl;
+        aps.url = a.protocol + '//' + a.hostname + ':8440/RPC2';
         tmp.aps = aps;
-        restclient.sqlite.saveRequest(tmp, v.requestUrl, v.favorite);
+        restclient.sqlite.saveRequest(tmp, v.requestName, v.favorite);
       });
       restclient.sqlite.close();
     }

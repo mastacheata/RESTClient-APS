@@ -115,8 +115,14 @@ restclient.main = {
     $('.toggle-request-timer').click(restclient.main.toggleRequestTimer);
     $('.toggle-ta-autosize').click(restclient.main.toggleTAAutosize);    
     $('.clear-cached-requests').click(restclient.main.clearCachedRequests);
-    $('h4 ~ #curl-command').prev().children('a').click(restclient.main.updateCurlCommand);
-    $('h4 ~ #curl-token-command').prev().children('a').click(restclient.main.updateCurlTokenCommand);
+    $('h4 ~ #curl-command').prev().children('a').click(function () {
+      restclient.main.updateCurlCommand();
+      restclient.main.showCurl();
+    });
+    $('h4 ~ #curl-token-command').prev().children('a').click(function () {
+      restclient.main.updateCurlTokenCommand();
+      restclient.main.showCurl();
+    });
 
     $('#modal-oauth-view .btnAutoRefresh').bind('click', function () {
       var headerId = $('#modal-oauth-view').data('source-header-id');
@@ -1119,12 +1125,17 @@ restclient.main = {
     return false;
   },
   showResponse: function () {
-    $("#response").show();
-    document.getElementById('response').scrollIntoView(true);
+    document.getElementById('response').scrollIntoView({
+      block: 'start',
+      behavior: 'smooth'
+    });
     return false;
   },
   showCurl: function() {
-    document.getElementById('curl').scrollIntoView(true);
+    document.getElementById('curl').scrollIntoView({
+      block: 'start',
+      behavior: 'smooth'
+    });
     return false;
   },
   clearResult: function () {
