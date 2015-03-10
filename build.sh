@@ -21,7 +21,9 @@ find . -depth -name '.DS_Store' -exec rm -rf "{}" \;
 find . -depth -name '*.test.js' -exec rm -rf "{}" \;
 
 echo "Writing version ..."
-sed -i "s/versionNumber = \"\"/versionNumber = \"$(grep '<em:version>' install.rdf | sed 's/^.*n>\(.\+\)<\/e.*$/\1/')\"/" content/js/restclient.overlay.js
+VERSION=$(grep '<em:version>' install.rdf | sed 's/^.*n>\(.\+\)<\/e.*$/\1/')
+sed -i "s/versionNumber = \"\"/versionNumber = \"$VERSION\"/" content/js/restclient.overlay.js
+sed -i "s|\(<a class=\"brand\" href=\"https://github.com/gear54rus/RESTClient-APS\">\)\(RESTClient APS\)\(<\/a>\)|\1\2 (v$VERSION)\3|" content/restclient.html
 
 echo "Creating $XPI ..."
 zip -qr9DX "../$XPI" *

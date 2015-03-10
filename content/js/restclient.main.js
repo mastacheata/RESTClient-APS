@@ -59,12 +59,6 @@ restclient.main = {
     this.initEvents();
     this.initSkin();
 
-    var brand = $('header a.brand'),
-      version = restclient.getPref('version');
-    if (version) {
-      brand.text(brand.text() + ' (v' + version + ')');
-    }
-
     restclient.main.navTop = $('.subnav').length && $('.subnav').offset().top - $('.navbar').first().height();
     $(window).on('scroll', restclient.main.processScroll).scroll();
 
