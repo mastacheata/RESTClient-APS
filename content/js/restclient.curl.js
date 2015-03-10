@@ -42,7 +42,7 @@ restclient.curl = {
         headersStrings += " -H '" + header[0] + ':' + header[1] + "'";
       }
       if (request.aps.mode)
-        headersStrings += ' -H \'APS-Token:' + $('#aps-token').val() + '\'';
+        headersStrings += ' -H \'APS-Token:' + request.aps.token + '\'';
       curl += ' -i ' + headersStrings;
     }    
 

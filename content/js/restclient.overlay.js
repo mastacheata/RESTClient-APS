@@ -94,6 +94,7 @@ restclient.overlay = {
       restclient.sqlite.db.executeSimpleSQL('DROP TABLE requests');
       restclient.sqlite.db.createTable('requests', restclient.sqlite.tables['requests']);
       var aps = {
+          mode: 1,
           type: 'getAccountToken',
           parameters: '1'
         },
