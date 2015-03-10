@@ -106,6 +106,18 @@ restclient.overlay = {
         tmp.aps = aps;
         restclient.sqlite.saveRequest(tmp, v.requestName, v.favorite);
       });
+      stmt = restclient.sqlite.db.createStatement('SELECT * FROM history');
+      requests.length = 0;
+      while (stmt.executeStep()) {
+        requests.push(JSON.parse(stmt.row.request));
+      }
+      restclient.sqlite.db.executeSimpleSQL('DELETE FROM history');
+      requests.forEach(function (v) {
+        a.href = v.url;
+        aps.url = a.protocol + '//' + a.hostname + ':8440/RPC2';
+        v.aps = aps;
+        restclient.sqlite.saveHistory(v);
+      });
       restclient.sqlite.close();
     }
   },
