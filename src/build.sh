@@ -7,9 +7,10 @@ echo "Creating working directory ..."
 rm -rf build
 mkdir build
 cp -r \
-  install.rdf content LICENSE\
-      modules icon.png chrome.manifest \
-  build/
+    modules content\
+    chrome.manifest install.rdf icon.png\
+    build/
+[ -f LICENSE ] && cp LICENSE build/
 cd build
 
 echo "Cleaning up unwanted files ..."
