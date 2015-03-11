@@ -969,7 +969,7 @@ restclient.main = {
 
       if (text.length > restclient.main.headerMenuMaxLength)
         croppedText = text.substr(0, restclient.main.headerMenuMaxLength -3) + "...";
-      var a =   $('<a class="favorite" href="#" title='+text+'></a>').text(croppedText)
+      var a = $('<a class="favorite" href="#" title='+text+'></a>').text(croppedText)
         .attr('header-name', header[0])
         .attr('header-value', header[1]);
       $('.custom-header').after($('<li></li>').append(a));
@@ -1367,7 +1367,7 @@ restclient.main = {
       if (name.length > restclient.main.requestMenuMaxLength)
         name = name.substr(0, restclient.main.requestMenuMaxLength -3) + "...";
 
-      var a =   $('<a class="favorite" href="#"></a>').text(name)
+      var a = $('<a class="favorite" href="#"></a>').text(name)
         .data('request', savedRequest[name])
         .data('request-name', name);
       $('.savedRequest').prepend($('<li></li>').append(a));
@@ -1638,8 +1638,10 @@ restclient.main = {
         if (this.value && this.validity.valid) {
           var oldHost = a.hostname;
           a.href = this.value;
-          if (a.hostname !== oldHost)
+          if (a.hostname !== oldHost) {
+            restclient.aps.lastFetch = null;
             eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
+          }
         }
       }).change();
       $('input[type=radio][name="aps-mode"]').change(function() {
