@@ -259,7 +259,7 @@ restclient.main = {
     if (enableCurl === true) {
       $('#curl').addClass('showForStartup');
       $('.enable-curl').attr('data-curl', 'enable');
-      $('.enable-curl').text('Disable Curl');
+      $('.enable-curl').text('Disable cURL');
     }
     
     var defaultTheme = restclient.getPref('defaultSkin', 'simplex');
@@ -392,7 +392,7 @@ restclient.main = {
     $('#curl').slideToggle('slow', function() {
       if($('#curl').is(':visible')) {
         $('.enable-curl').attr('data-curl', 'enable');
-        $('.enable-curl').text('Disable Curl');
+        $('.enable-curl').text('Disable cURL');
         $('.curl-menu').show();
         restclient.main.updateCurlCommand();
         restclient.main.updateCurlTokenCommand();
@@ -401,7 +401,7 @@ restclient.main = {
       else
       {
         $('.enable-curl').attr('data-curl', 'disabled');
-        $('.enable-curl').text('Enable Curl');
+        $('.enable-curl').text('Enable cURL');
         $('.curl-menu').hide();
         restclient.setPref('enableCurl', false);
       }
