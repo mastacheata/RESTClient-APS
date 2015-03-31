@@ -75,7 +75,6 @@ restclient.http = {
       restclient.main.updateProgressBar(-1, 'Sending data...');
   },
   onerror: function(err) {
-    console.log(this);
     var tcpErr = restclient.http.getTCPError(this),
       errData = ["Error: Could not connect to server...", tcpErr.type + ': ' + tcpErr.name, '', 'Firefox was unable to open this URL: '+restclient.http.url, 'Navigate to it in a browser tab and fix any errors before re-issuing the request!'];
     restclient.main.clearResult();
