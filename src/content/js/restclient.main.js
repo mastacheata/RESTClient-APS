@@ -1046,13 +1046,14 @@ restclient.main = {
       return str;
   },
   setResponseHeader: function (headers, line) {
-    //restclient.log(headers);
     if (!headers) {
       $('#response-headers pre').text('');
       return false;
     }
     if (typeof line === 'boolean' && line == false) {
-      var text = (typeof headers == 'object' && headers.length > 0) ? headers.join("\n") : '';
+      var text = Array.isArray(headers) ? headers.join("\n") : '';
+      if (!text.length)
+        return;
       $('#response-headers pre').text(text);
     }
     else
@@ -1100,7 +1101,6 @@ restclient.main = {
         maxWidth = ($(this).outerWidth(true) > maxWidth) ? $(this).outerWidth(true) : maxWidth;
       });
       $('#response-headers .header-name').width(maxWidth + 10);
-      //$('#response-headers .header-value').css('margin-left', maxWidth + 20 + 'px');
     }
   },
   updateProgressBar: function (idx, status) {

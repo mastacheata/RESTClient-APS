@@ -116,20 +116,24 @@ restclient.aps = {
         var response = $(this.responseXML);
         if (this.status !== 200) {
           restclient.aps.showMsg('POA API says: ' + this.status + ' ' + this.statusText, true);
+          if (fail)
+            fail();
         } else if (response.find('name:contains("error_message")').length) {
           restclient.aps.showMsg('POA API says: ' + response.find('name:contains("error_message") + value > string').text(), true);
+          if (fail)
+            fail();
         } else {
           eToken.val(response.find('name:contains("aps_token") + value > string').text());
           restclient.aps.showMsg('New token acquired!');
           restclient.aps.lastFetch = moment();
+          if (done)
+            done();
         }
         restclient.main.updateProgressBar(-1);
-        if (done)
-          done();
       },
-      onerror: function() {
-        restclient.aps.showMsg('POA API says: ' + this.status + ' ' + this.statusText, true);
-        restclient.main.updateProgressBar(-1);
+      onerror: function(err) {
+        restclient.aps.showMsg('Unable to connect, see below...', true);
+        restclient.http.onerror.call(this, err);
         if (fail)
           fail();
       }
