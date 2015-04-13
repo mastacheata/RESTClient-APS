@@ -113,7 +113,7 @@ restclient.overlay = {
   },
   open: function(){
     var browser = restclient.overlay.getBrowser();
-    browser.selectedTab = browser.addTab('chrome://restclient/content/restclient.html' + (browser.contentDocument.querySelector('script[src^="/pem/common/js/pem.js"]') ? '?url=' + browser.currentURI.specIgnoringRef : ''));
+    browser.selectedTab = browser.addTab('chrome://restclient/content/restclient.html' + (browser.contentDocument.querySelector('script[src^="/pem/common/js/pem.js"]') ? '?url=' + browser.currentURI.prePath : ''));
   }
 }
 window.addEventListener("load", function(){ restclient.overlay.init();  }, false);

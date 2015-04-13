@@ -497,7 +497,7 @@ restclient.main = {
     });
     var queryObject = restclient.helper.getQuery();
     if (queryObject.url) {
-      $('#request-url').val(queryObject.url + 'aps/2/resources/');
+      $('#request-url').val(queryObject.url + '/aps/2/resources/');
       history.pushState({}, '', location.origin + location.pathname + location.hash);      
     }
   },
