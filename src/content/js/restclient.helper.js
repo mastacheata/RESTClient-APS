@@ -155,6 +155,32 @@ restclient.helper = {
     
     return parts.protocol + parts.doubleSlash + parts.authority + parts.pathname + search;
   },
+  getQuery: function(href) {
+    var param = typeof href === 'string';
+    do {
+      var tmp = (param ? href : decodeURI(window.location.search)),
+        tmp1,
+        result = {};
+      if (!tmp.length)
+        break;
+      tmp = tmp.split('?');
+      if (tmp.length === 1)
+        break;
+      tmp = tmp[tmp.length - 1];
+      if (!tmp.length)
+        break;
+      tmp.split('&').forEach(function(v) {
+        tmp = v.indexOf('=');
+        if (tmp === 0)
+          return;
+        if (tmp === -1)
+          result[v] = '';
+        else
+          result[v.slice(0, tmp)] = v.slice(tmp + 1);
+      });
+    } while (false);
+    return result;
+  },
   validateUrl: function (url) {
     return this.isAbsoluteUrl(url);
   },

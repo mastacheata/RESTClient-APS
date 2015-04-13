@@ -495,6 +495,11 @@ restclient.main = {
       $('#request-url').val($(this).data('url'));
       restclient.main.updateFavoriteUrlIcon();
     });
+    var queryObject = restclient.helper.getQuery();
+    if (queryObject.url) {
+      $('#request-url').val(queryObject.url + 'aps/2/resources/');
+      history.pushState({}, '', location.origin + location.pathname + location.hash);      
+    }
   },
   getCachedUrls: function () {
     if (restclient.main.cachedUrls)
