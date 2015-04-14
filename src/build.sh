@@ -23,7 +23,7 @@ find . -depth -name '*.test.js' -exec rm -rf "{}" \;
 
 echo "Writing version ..."
 VERSION=$(grep '<em:version>' install.rdf | sed 's/^.*n>\(.\+\)<\/e.*$/\1/')
-sed -i "s/versionNumber = \"\"/versionNumber = \"$VERSION\"/" content/js/restclient.overlay.js
+sed -i "s/versionNumber = ''/versionNumber = '$VERSION'/" content/js/restclient.overlay.js
 sed -i "s|\(<a class=\"brand\" href=\"https://github.com/gear54rus/RESTClient-APS\">\)\(RESTClient APS\)|\1\2 (v$VERSION)|" content/restclient.html
 
 [ "$1" = "release" ] && echo "Config set to \"release\"" && sed -i "s|<em:unpack>true|<em:unpack>false|" install.rdf

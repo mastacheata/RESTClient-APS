@@ -44,14 +44,13 @@ restclient.overlay = {
     return mainWindow.gBrowser;
   },
   firstRun: function() {
-    var versionNumber = "",
+    var versionNumber = '',
       currentVersion = restclient.getPref('version', '');
 
     if (versionNumber != currentVersion) { //install/upgrade
       for (var k in restclient.overlay.upgrades) {
         if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
           restclient.overlay.upgrades[k]();
-          break;
         }
       }
       restclient.setPref('version', versionNumber);
@@ -64,7 +63,7 @@ restclient.overlay = {
       navbar.currentSet = newset;
       navbar.setAttribute("currentset", newset);
       document.persist("nav-bar", "currentset");
-      restclient.setPref('defaultSkin', 'cerulean');
+      restclient.setPref('skin', 'cerulean');
       restclient.setPref('enableCurl', true);
       restclient.setPref('taAutosize', true);
       restclient.setPref('requestTimer', true);
@@ -109,6 +108,10 @@ restclient.overlay = {
       });      
       restclient.sqlite.db.executeSimpleSQL('DELETE FROM history');
       restclient.sqlite.close();
+    },
+    '> 0': function() {
+      restclient.setPref('skin', restclient.getPref('defaultSkin', 'cerulean'));
+      restclient.deletePref('defaultSkin');
     }
   },
   open: function(){

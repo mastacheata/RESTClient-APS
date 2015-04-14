@@ -218,11 +218,11 @@ restclient.main = {
       $('.enable-curl').text('Disable cURL');
     }
     
-    var defaultTheme = restclient.getPref('defaultSkin', 'cerulean');
+    var defaultTheme = restclient.getPref('skin', 'cerulean');
     restclient.main.changeSkin(defaultTheme);
     $('a[data-theme]').click(function () {
       restclient.main.changeSkin($(this).attr('data-theme'));
-      restclient.setPref('defaultSkin', $(this).attr('data-theme'));
+      restclient.setPref('skin', $(this).attr('data-theme'));
     });
     //wait for css load
     setTimeout(function () { $('.showForStartup').show(); }, 200);
