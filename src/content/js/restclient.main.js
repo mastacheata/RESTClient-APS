@@ -182,62 +182,18 @@ restclient.main = {
   },
   changeSkin: function (theme) {
     this.currentTheme = theme;
-    $("link").remove();
+    $('link[href^="css/themes/"]').remove();
     $("<link/>", {
        rel: "stylesheet",
        type: "text/css",
        href: "css/themes/" + theme + "/bootstrap.css"
-    }).appendTo("head");
-    $("<link/>", {
+    }).add("<link/>", {
        rel: "stylesheet",
        type: "text/css",
        href: "css/themes/" + theme + "/bootstrap-responsive.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/font-awesome.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/restclient.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/XMLPrettyPrint.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/prettify.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/KelpJSONView.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/bootstrap-tagsinput.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/bootstrap-switch.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/animate.css"
-    }).appendTo("head");
-    $("<link/>", {
-       rel: "stylesheet",
-       type: "text/css",
-       href: "css/restclient.bookmark.css"
-    }).appendTo("head");
+    }).on('error', function() {
+      restclient.main.changeSkin('cerulean');
+    }).insertBefore($('head > link[rel="stylesheet"]').first());    
   },
   initSkin: function () {
     var requestHeaderLayout = restclient.getPref('requestHeaderLayout', 'tag'),
@@ -262,7 +218,7 @@ restclient.main = {
       $('.enable-curl').text('Disable cURL');
     }
     
-    var defaultTheme = restclient.getPref('defaultSkin', 'simplex');
+    var defaultTheme = restclient.getPref('defaultSkin', 'cerulean');
     restclient.main.changeSkin(defaultTheme);
     $('a[data-theme]').click(function () {
       restclient.main.changeSkin($(this).attr('data-theme'));
