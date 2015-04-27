@@ -52,6 +52,11 @@ restclient.main = {
     escape: 'esc'
   },
   init: function () {
+    var queryObject = restclient.helper.getQueryObject();
+    for (var k in queryObject) {
+      history.pushState({}, '', location.origin + location.pathname + location.hash);
+      break;
+    }
     restclient.init();
     restclient.autoupdate.check();
     restclient.sqlite.open();
@@ -69,7 +74,7 @@ restclient.main = {
     this.initRequestUrl();    
     this.updateFavoriteHeadersMenu();
     this.updateFavoriteRequestMenu();
-    this.initAPS();
+    this.initAPS(queryObject);
 
     $('#request-button').bind('click', restclient.main.sendRequest);
     $('#request-url').bind('keyup', restclient.main.requestURLKeyUP).focus().select();
@@ -451,11 +456,6 @@ restclient.main = {
       $('#request-url').val($(this).data('url'));
       restclient.main.updateFavoriteUrlIcon();
     });
-    var queryObject = restclient.helper.getQuery();
-    if (queryObject.url) {
-      $('#request-url').val(queryObject.url + '/aps/2/resources/');
-      history.pushState({}, '', location.origin + location.pathname + location.hash);      
-    }
   },
   getCachedUrls: function () {
     if (restclient.main.cachedUrls)
@@ -1585,7 +1585,7 @@ restclient.main = {
     }
     return false;
   },
-  initAPS: function () {
+  initAPS: function(queryObject) {
     var eAPIUrl = $('#poa-api-url'),
         eAPIUser = $('#poa-api-user'),
         eAPIPass = $('#poa-api-password'),
@@ -1595,6 +1595,18 @@ restclient.main = {
         eRefreshToken = $('#aps-token-refresh-button'),
         inputs = $([eAPIUrl[0], eAPIUser[0], eAPIPass[0], eTokenType[0], eParams[0], eToken[0], eRefreshToken[0]]),
         a = document.createElement('a');
+
+      if (queryObject.url)
+        $('#request-url').val(queryObject.url + '/aps/2/resources/');
+      if (queryObject.apsAccount) {
+        var tokenTypeParams = queryObject.apsAccount;
+        if (queryObject.apsSubscription)
+          tokenTypeParams += ' ' + queryObject.apsSubscription;
+        eParams.val(tokenTypeParams);
+      } else
+        eParams.val('1');
+      if (queryObject.apsMode)
+        $('input[type=radio][name="aps-mode"][value="2"]').prop('checked', true);        
       $('#request-url').change(function() {
         if (this.value && this.validity.valid) {
           var oldHost = a.hostname;
@@ -1617,7 +1629,6 @@ restclient.main = {
       eParams.change(function() {
         restclient.aps.lastFetch = null;
       });
-      eParams.val('1');
       eRefreshToken.click(function() {
         restclient.aps.refreshToken();
       });

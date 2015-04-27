@@ -114,9 +114,29 @@ restclient.overlay = {
       restclient.deletePref('defaultSkin');
     }
   },
-  open: function(){
-    var browser = restclient.overlay.getBrowser();
-    browser.selectedTab = browser.addTab('chrome://restclient/content/restclient.html' + (browser.contentDocument.querySelector('script[src^="/pem/common/js/pem.js"]') ? '?url=' + browser.currentURI.prePath : ''));
+  open: function() {
+    var browser = restclient.overlay.getBrowser(),
+      query = {};
+    if (browser.contentDocument.querySelector('script[src^="/pem/common/js/pem.js"]')) {
+      query.url = browser.currentURI.prePath;
+      query.apsMode = 1;
+      var topFrame = browser.contentDocument.defaultView.frames.topFrame;
+      if (topFrame) {
+        var element;
+        topFrame = topFrame.document;
+        if (element = topFrame.querySelector('#user_name > b')) {
+          var match = element.textContent.match(/\(Account ID: (\d+)\)/i);
+          if (match)
+            query.apsAccount = parseInt(match[1], 10);
+          element = topFrame.querySelector('#sel_sub_id > option[selected]');
+          match = element.textContent.match(/\d+$/);
+          if (match)
+            query.apsSubscription = parseInt(match[0], 10);
+        }
+      }
+    }
+    query = restclient.helper.createQueryString(query);
+    browser.selectedTab = browser.addTab('chrome://restclient/content/restclient.html' + (query ? '?' + query : ''));
   }
 }
 window.addEventListener("load", function(){ restclient.overlay.init();  }, false);

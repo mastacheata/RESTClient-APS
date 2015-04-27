@@ -155,7 +155,7 @@ restclient.helper = {
     
     return parts.protocol + parts.doubleSlash + parts.authority + parts.pathname + search;
   },
-  getQuery: function(href) {
+  getQueryObject: function(href) {
     var param = typeof href === 'string';
     do {
       var tmp = (param ? href : decodeURI(window.location.search)),
@@ -176,10 +176,17 @@ restclient.helper = {
         if (tmp === -1)
           result[v] = '';
         else
-          result[v.slice(0, tmp)] = v.slice(tmp + 1);
+          result[decodeURIComponent(v.slice(0, tmp))] = decodeURIComponent(v.slice(tmp + 1));
       });
     } while (false);
     return result;
+  },
+  createQueryString: function(object) {
+    var result = [];
+    for (var k in object)
+      if (object.hasOwnProperty(k))
+        result.push(encodeURIComponent(k) + '=' + encodeURIComponent(object[k]));
+    return result.join('&');
   },
   validateUrl: function (url) {
     return this.isAbsoluteUrl(url);
