@@ -26,37 +26,30 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * ***** END LICENSE BLOCK ***** */
 
-"use strict";
+'use strict';
 
 restclient.curl = {
-  constructCommand: function(request) {
-    var curl = 'curl';
-
+  constructCommand: function (request) {
+    var result = 'curl';
     if (typeof request.method !== 'undefined')
-      curl += ' -X ' + request.method;
-
+      result += ' -X' + request.method;
+    result += ' -i';
     if (typeof request.headers !== 'undefined') {
-      var headersStrings = '';
-
-      for (var i = 0, header; header = request.headers[i]; i++) {
-        headersStrings += " -H '" + header[0] + ':' + header[1] + "'";
-      }
+      var headers = '';
+      for (var i = 0, header; header = request.headers[i]; i++)
+        headers += ' -H\'' + header[0] + ':' + header[1] + '\'';
       if (request.aps.mode)
-        headersStrings += ' -H \'APS-Token:' + request.aps.token + '\'';
-      curl += ' -i ' + headersStrings;
-    }    
-
-    if (typeof request.body !== 'undefined' && request.body !== '') {
-      curl += " -d '" + request.body + "' ";
-      //TODO escape special chars
+        headers += ' -H\'APS-Token:' + request.aps.token + '\'';
+      result += headers;
     }
-
-    if (typeof request.url !== 'undefined') {
-      curl += " '" + request.url + "'";
-    }
-    return curl;
+    if (typeof request.body !== 'undefined' && request.body !== '')
+      result += ' -d \'' + request.body + '\'';
+    //TODO escape special chars
+    if (typeof request.url !== 'undefined')
+      result += ' \'' + request.url + '\'';
+    return result;
   },
-  constructTokenCommand: function(aps) {
-    return 'curl -X POST ' + (aps.user ? ('-u \'' + aps.user + ':' + aps.password + '\'') : '') + ' -d \'' + restclient.aps.apiMethods[aps.type][1](aps.parameters) + '\' \'' + aps.url + '\' 2>/dev/null|tail -n1|sed \'s/^.*aps_token<\\/name><value><string>\\([^<]\\+\\).*$/\\1/\'';
+  constructTokenCommand: function (aps) {
+    return 'curl -XPOST' + (aps.user ? (' -u\'' + aps.user + ':' + aps.password + '\'') : '') + ' -d\'' + restclient.aps.apiMethods[aps.type][1](aps.parameters) + '\' \'' + aps.url + '\' 2>/dev/null|tail -n1|sed \'s|^.*aps_token</name><value><string>\\([^<]\\+\\).*$|\\1|\'';
   }
 }
