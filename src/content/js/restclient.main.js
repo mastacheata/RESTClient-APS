@@ -1586,7 +1586,8 @@ restclient.main = {
     return false;
   },
   initAPS: function(queryObject) {
-    var eAPIUrl = $('#poa-api-url'),
+    var eAPSMode = $('input[type=radio][name="aps-mode"]'),
+        eAPIUrl = $('#poa-api-url'),
         eAPIUser = $('#poa-api-user'),
         eAPIPass = $('#poa-api-password'),
         eTokenType = $('#aps-token-type'),
@@ -1606,7 +1607,7 @@ restclient.main = {
       } else
         eParams.val('1');
       if (queryObject.apsMode)
-        $('input[type=radio][name="aps-mode"][value="2"]').prop('checked', true);        
+        eAPSMode.filter('[value="2"]').prop('checked', true);        
       $('#request-url').change(function() {
         if (this.value && this.validity.valid) {
           var oldHost = a.hostname;
@@ -1617,7 +1618,7 @@ restclient.main = {
           }
         }
       }).change();
-      $('input[type=radio][name="aps-mode"]').change(function() {
+      eAPSMode.change(function() {
         inputs.attr('disabled', !parseInt(this.value));
       });
       eTokenType.change(function() {
