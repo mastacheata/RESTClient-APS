@@ -106,7 +106,7 @@ restclient.main = {
     $('#curl-command, #curl-token-command').val('');  
 
     if (restclient.getPref('taAutosize')) {
-      $('#request-body, #curl-command, #curl-token-command').autosize();
+      autosize($('#request-body, #curl-command, #curl-token-command'));
       $('.toggle-ta-autosize').attr('data-ta-autosize', 'enabled').text('Disable Textarea Autoresize');
     }
 
@@ -144,8 +144,8 @@ restclient.main = {
       $('#modal-oauth-view textarea').val($('span[data-header-id="' + headerId + '"]').attr('header-value'));
     });
 
-    window.onhashchange = restclient.main.hashChange;
-    restclient.main.hashChange();    
+    (window.onhashchange = restclient.main.hashChange)();
+    restclient.main.triggerTAAutosize(10);
   },
   initEvents: function(){
     $('#bm-sidebar-inner a.favorite').live('click', restclient.bookmark.toggleFavorite);
@@ -179,8 +179,8 @@ restclient.main = {
       {
         restclient.error(e);
       }
-      //restclient.main.updateCurlCommand(); 
-      //restclient.main.updateCurlTokenCommand();
+      restclient.main.updateCurlCommand(); 
+      restclient.main.updateCurlTokenCommand();
       restclient.main.clearResult();
       window.scrollTo(0,0);
     }
@@ -426,13 +426,15 @@ restclient.main = {
     e.attr('data-ta-autosize', state ? 'disabled' : 'enabled').text((state ? 'Enable' : 'Disable') + ' Textarea Autoresize');
     restclient.setPref('taAutosize', !state);
     if (state)
-      ta.trigger('autosize.destroy')
-    else
-      ta.autosize().trigger('autosize.resize');
+      autosize.destroy(ta);
+    else {
+      autosize(ta);
+    }
   },
-  triggerTAAutosize: function() {
+  triggerTAAutosize: function(retries) {
+    var e = $('#request-body, #curl-command, #curl-token-command');
     if ($('a[data-ta-autosize]').attr('data-ta-autosize') === 'enabled')
-      $('#request-body, #curl-command, #curl-token-command').trigger('autosize.resize');
+      retries ? autosize.update(e) : autosize.delayedUpdate(e, retries);
   },
   toggleRequestHistoryPanel: function() {
     if( $('#request-history-dropdown').is(':hidden') )
@@ -1383,14 +1385,12 @@ restclient.main = {
           request.body    = (request.requestBody)   ? request.requestBody : false;
           var headers     = (request.headers && typeof request.headers == 'object')
                                                     ? request.headers : false;
-          //restclient.log(headers);
           request.headers = [];
           if (headers)
             for(var i=0; i < headers.length; i++)
             {
               request.headers.push([headers[i], headers[++i]]);
             }
-          //restclient.log(request);
           restclient.main.applyRequest(request);
         }catch(e) { alert('Cannot load this request.'); }
       });
@@ -1597,42 +1597,42 @@ restclient.main = {
         inputs = $([eAPIUrl[0], eAPIUser[0], eAPIPass[0], eTokenType[0], eParams[0], eToken[0], eRefreshToken[0]]),
         a = document.createElement('a');
 
-      if (queryObject.url)
-        $('#request-url').val(queryObject.url + '/aps/2/resources/');
-      if (queryObject.apsAccount) {
-        var tokenTypeParams = queryObject.apsAccount;
-        if (queryObject.apsSubscription)
-          tokenTypeParams += ' ' + queryObject.apsSubscription;
-        eParams.val(tokenTypeParams);
-      } else
-        eParams.val('1');
-      if (queryObject.apsMode)
-        eAPSMode.filter('[value="2"]').prop('checked', true);        
-      $('#request-url').change(function() {
-        if (this.value && this.validity.valid) {
-          var oldHost = a.hostname;
-          a.href = this.value;
-          if (a.hostname !== oldHost) {
-            restclient.aps.lastFetch = null;
-            eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
-          }
+    if (queryObject.url)
+      $('#request-url').val(queryObject.url + '/aps/2/resources/');
+    if (queryObject.apsAccount) {
+      var tokenTypeParams = queryObject.apsAccount;
+      if (queryObject.apsSubscription)
+        tokenTypeParams += ' ' + queryObject.apsSubscription;
+      eParams.val(tokenTypeParams);
+    } else
+      eParams.val('1');
+    if (queryObject.apsMode)
+      eAPSMode.filter('[value="2"]').prop('checked', true);        
+    $('#request-url').change(function() {
+      if (this.value && this.validity.valid) {
+        var oldHost = a.hostname;
+        a.href = this.value;
+        if (a.hostname !== oldHost) {
+          restclient.aps.lastFetch = null;
+          eAPIUrl.val(a.protocol + '//' + a.hostname + ':8440/RPC2');
         }
-      }).change();
-      eAPSMode.change(function() {
-        inputs.attr('disabled', !parseInt(this.value));
-      });
-      eTokenType.change(function() {
-        var method = restclient.aps.apiMethods[this.value];
-        eParams.attr('placeholder', method[0]);
-        restclient.aps.apiCallBody = method[1];
-        restclient.aps.lastFetch = null;
-      }).change();
-      eParams.change(function() {
-        restclient.aps.lastFetch = null;
-      });
-      eRefreshToken.click(function() {
-        restclient.aps.refreshToken();
-      });
+      }
+    }).change();
+    eAPSMode.change(function() {
+      inputs.attr('disabled', !parseInt(this.value));
+    });
+    eTokenType.change(function() {
+      var method = restclient.aps.apiMethods[this.value];
+      eParams.attr('placeholder', method[0]);
+      restclient.aps.apiCallBody = method[1];
+      restclient.aps.lastFetch = null;
+    }).change();
+    eParams.change(function() {
+      restclient.aps.lastFetch = null;
+    });
+    eRefreshToken.click(function() {
+      restclient.aps.refreshToken();
+    });
   },
   initOAuthWindow: function () {
     var auto_oauth_timestamp    = $('#oauth-setting [name="auto_oauth_timestamp"]'),
@@ -2018,10 +2018,10 @@ restclient.main = {
     }
   },
   updateCurlCommand: function() {
-    $("#curl-command").val(restclient.curl.constructCommand(restclient.main.getRequest())).trigger('autosize.resize');
+    autosize.update($("#curl-command").val(restclient.curl.constructCommand(restclient.main.getRequest())));
   },
   updateCurlTokenCommand: function() {
-    $("#curl-token-command").val(restclient.curl.constructTokenCommand(restclient.main.getRequest().aps)).trigger('autosize.resize');
+    autosize.update($("#curl-token-command").val(restclient.curl.constructTokenCommand(restclient.main.getRequest().aps)));
   },
   sendRequest: function () {
     $('.popover').removeClass('in').remove();
