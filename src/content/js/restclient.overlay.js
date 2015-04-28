@@ -48,7 +48,7 @@ restclient.overlay = {
       currentVersion = restclient.getPref('version', '');
 
     if (versionNumber != currentVersion) { //install/upgrade
-      console.log('[RESTClient APS] Executing the ' + (currentVersion ? 'installation' : 'upgrade') + ' procedure...');
+      console.log('[RESTClient APS] Executing the ' + (currentVersion ? 'upgrade' : 'installation') + ' procedure...');
       try {
         for (var k in restclient.overlay.upgrades) {
           if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
@@ -57,9 +57,9 @@ restclient.overlay = {
           }
         }
         restclient.setPref('version', versionNumber);
-        console.log('[RESTClient APS] Extension was successfully ' + (currentVersion ? 'installed' : 'upgraded') + '!');
+        console.log('[RESTClient APS] Extension was successfully ' + (currentVersion ? 'upgraded' : 'installed') + '!');
       } catch(e) {
-        console.error('[RESTClient APS] There was an error during ' + (currentVersion ? 'installation' : 'upgrade') + '...', e);
+        console.error('[RESTClient APS] There was an error during ' + (currentVersion ? 'upgrade' : 'installation') + '...', e);
       }
     }
   },
