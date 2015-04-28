@@ -86,7 +86,7 @@ restclient.http = {
     if(restclient.http.startTime)
     {
       var requestTime = (new Date().getTime()) - restclient.http.startTime;
-      restclient.main.showStatus('Execute Time : ' + requestTime + 'ms')
+      restclient.main.showStatus('Execution Time : ' + requestTime + 'ms')
     }
     restclient.main.clearResult();
     xhr = xhr.target;

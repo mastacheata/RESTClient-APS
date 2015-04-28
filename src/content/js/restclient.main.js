@@ -429,7 +429,9 @@ restclient.main = {
       autosize(ta);
   },
   triggerTAAutosize: function(retries) {
-    var e = $('#request-body, #curl-command, #curl-token-command');
+    var e = $('#request-body');
+    if (restclient.getPref('enableCurl'))
+      e = e.add('#curl-command, #curl-token-command');
     if ($('a[data-ta-autosize]').attr('data-ta-autosize') === 'enabled')
       retries ? autosize.delayedUpdate(e, retries) : autosize.update(e);
   },
@@ -1558,7 +1560,8 @@ restclient.main = {
           else
             restclient.main.addHttpRequestHeader(header[0], header[1]);
     }
-    restclient.main.updateCurlCommand();
+    if (restclient.getPref('enableCurl'))
+      restclient.main.updateCurlCommand();
     if (aps !== false) {
       $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').attr('checked', true).trigger('change');
       $('#oa-api-url').val(request.aps.url);
@@ -1567,7 +1570,8 @@ restclient.main = {
       $('#aps-token-type').val(request.aps.type);
       $('#aps-token-type-params').val(request.aps.parameters);
       $('#aps-token').val(request.aps.token);
-      restclient.main.updateCurlTokenCommand();
+      if (restclient.getPref('enableCurl'))
+        restclient.main.updateCurlTokenCommand();
     }
     restclient.main.triggerTAAutosize();
     return true;
@@ -2082,7 +2086,7 @@ restclient.main = {
         restclient.main.removeHttpRequestHeaderByName('APS-Token');
         request.headers.push(['APS-Token', request.aps.token]);
       }
-      if($('#curl').is(':visible'))
+      if (restclient.getPref('enableCurl'))
         restclient.main.updateCurlCommand();
       restclient.http.sendRequest(request.method, request.url, request.headers, request.overrideMimeType, request.body);
     }
