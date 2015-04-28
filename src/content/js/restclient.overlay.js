@@ -48,12 +48,19 @@ restclient.overlay = {
       currentVersion = restclient.getPref('version', '');
 
     if (versionNumber != currentVersion) { //install/upgrade
-      for (var k in restclient.overlay.upgrades) {
-        if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
-          restclient.overlay.upgrades[k]();
+      console.log('[RESTClient APS] Executing the ' + (currentVersion ? 'installation' : 'upgrade') + ' procedure...');
+      try {
+        for (var k in restclient.overlay.upgrades) {
+          if ((k === currentVersion) || (k && restclient.helper.vercmp(currentVersion, k))) {
+            console.log('[RESTClient APS] Running node: \'' + k + '\' for version \'' + currentVersion + '\'...');
+            restclient.overlay.upgrades[k]();
+          }
         }
+        restclient.setPref('version', versionNumber);
+        console.log('[RESTClient APS] Extension was successfully ' + (currentVersion ? 'installed' : 'upgraded') + '!');
+      } catch(e) {
+        console.error('[RESTClient APS] There was an error during ' + (currentVersion ? 'installation' : 'upgrade') + '...', e);
       }
-      restclient.setPref('version', versionNumber);
     }
   },
   upgrades: {
