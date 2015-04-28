@@ -427,14 +427,13 @@ restclient.main = {
     restclient.setPref('taAutosize', !state);
     if (state)
       autosize.destroy(ta);
-    else {
+    else
       autosize(ta);
-    }
   },
   triggerTAAutosize: function(retries) {
     var e = $('#request-body, #curl-command, #curl-token-command');
     if ($('a[data-ta-autosize]').attr('data-ta-autosize') === 'enabled')
-      retries ? autosize.update(e) : autosize.delayedUpdate(e, retries);
+      retries ? autosize.delayedUpdate(e, retries) : autosize.update(e);
   },
   toggleRequestHistoryPanel: function() {
     if( $('#request-history-dropdown').is(':hidden') )
