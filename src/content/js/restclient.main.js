@@ -179,8 +179,6 @@ restclient.main = {
       {
         restclient.error(e);
       }
-      restclient.main.updateCurlCommand(); 
-      restclient.main.updateCurlTokenCommand();
       restclient.main.clearResult();
       window.scrollTo(0,0);
     }
@@ -1560,6 +1558,7 @@ restclient.main = {
           else
             restclient.main.addHttpRequestHeader(header[0], header[1]);
     }
+    restclient.main.updateCurlCommand();
     if (aps !== false) {
       $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').attr('checked', true).trigger('change');
       $('#poa-api-url').val(request.aps.url);
@@ -1568,6 +1567,7 @@ restclient.main = {
       $('#aps-token-type').val(request.aps.type);
       $('#aps-token-type-params').val(request.aps.parameters);
       $('#aps-token').val(request.aps.token);
+      restclient.main.updateCurlTokenCommand();
     }
     restclient.main.triggerTAAutosize();
     return true;
