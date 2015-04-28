@@ -977,9 +977,9 @@ restclient.main = {
     request.headers = headers;
     request.aps = {
       mode: parseInt($('input[type="radio"][name="aps-mode"]:checked').val(), 10),
-      url: $.trim($('#poa-api-url').val()),
-      user: $.trim($('#poa-api-user').val()),
-      password: $.trim($('#poa-api-password').val()),
+      url: $.trim($('#oa-api-url').val()),
+      user: $.trim($('#oa-api-user').val()),
+      password: $.trim($('#oa-api-password').val()),
       type: $('#aps-token-type').val(),
       parameters: $.trim($('#aps-token-type-params').val()),
       token: $.trim($('#aps-token').val())
@@ -1561,9 +1561,9 @@ restclient.main = {
     restclient.main.updateCurlCommand();
     if (aps !== false) {
       $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').attr('checked', true).trigger('change');
-      $('#poa-api-url').val(request.aps.url);
-      $('#poa-api-user').val(request.aps.user);
-      $('#poa-api-password').val(request.aps.password);
+      $('#oa-api-url').val(request.aps.url);
+      $('#oa-api-user').val(request.aps.user);
+      $('#oa-api-password').val(request.aps.password);
       $('#aps-token-type').val(request.aps.type);
       $('#aps-token-type-params').val(request.aps.parameters);
       $('#aps-token').val(request.aps.token);
@@ -1586,9 +1586,9 @@ restclient.main = {
   },
   initAPS: function(queryObject) {
     var eAPSMode = $('input[type=radio][name="aps-mode"]'),
-        eAPIUrl = $('#poa-api-url'),
-        eAPIUser = $('#poa-api-user'),
-        eAPIPass = $('#poa-api-password'),
+        eAPIUrl = $('#oa-api-url'),
+        eAPIUser = $('#oa-api-user'),
+        eAPIPass = $('#oa-api-password'),
         eTokenType = $('#aps-token-type'),
         eParams = $('#aps-token-type-params'),
         eToken = $('#aps-token'),

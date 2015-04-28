@@ -97,9 +97,9 @@ restclient.aps = {
     $('#aps-msg-container').css('color', type ? 'red' : 'green').text(moment().format('[[]HH:mm:ss[]] ') + message);
   },
   refreshToken: function(done, fail) {
-    var eAPIUrl = $('#poa-api-url'),
-      eAPIUser = $('#poa-api-user'),
-      eAPIPass = $('#poa-api-password'),
+    var eAPIUrl = $('#oa-api-url'),
+      eAPIUser = $('#oa-api-user'),
+      eAPIPass = $('#oa-api-password'),
       eParams = $('#aps-token-type-params'),
       eToken = $('#aps-token'),
       headers = [],
@@ -115,11 +115,11 @@ restclient.aps = {
       onload: function() {
         var response = $(this.responseXML);
         if (this.status !== 200) {
-          restclient.aps.showMsg('POA API says: ' + this.status + ' ' + this.statusText, true);
+          restclient.aps.showMsg('OA API says: ' + this.status + ' ' + this.statusText, true);
           if (fail)
             fail();
         } else if (response.find('name:contains("error_message")').length) {
-          restclient.aps.showMsg('POA API says: ' + response.find('name:contains("error_message") + value > string').text(), true);
+          restclient.aps.showMsg('OA API says: ' + response.find('name:contains("error_message") + value > string').text(), true);
           if (fail)
             fail();
         } else {

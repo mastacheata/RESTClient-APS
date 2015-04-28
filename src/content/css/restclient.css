@@ -114,7 +114,7 @@ a { cursor: pointer; }
 #aps button {
   margin-left: 2px;
 }
-#poa-api-url, #poa-api-user, #poa-api-password, #aps-token-type,  #aps-token-type-params, #aps-token {
+#oa-api-url, #oa-api-user, #oa-api-password, #aps-token-type,  #aps-token-type-params, #aps-token {
   border-radius: 3px;
   margin: 0 auto; 
 }
