@@ -59,7 +59,7 @@ restclient.oauth = {
 
     return {
         parameters: this._parameters,
-        signature: this.oauthEscape(oauth_signature),
+        signature: oauth_signature,
         signed_url: this._path + '?' + this.normalizeToString(),
         headerString: this.getHeaderString()
     };

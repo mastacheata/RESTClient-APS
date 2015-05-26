@@ -96,9 +96,9 @@ restclient.message = {
     }
     else{
       $('.messages-overlay').show();
-      container.appendTo('.messages-overlay .container');
+      container.appendTo('.messages-overlay .container-fluid');
       $('#' + id).bind('closed', function () {
-        if($('.messages-overlay .container').find('.alert').length == 1) {
+        if($('.messages-overlay .container-fluid').find('.alert').length == 1) {
           $('.messages-overlay').hide();
         }
 

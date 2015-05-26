@@ -388,6 +388,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>OAuth</h3>
   </div>
+  <div class="infobar" style="width: 85%; margin: 0 auto;"></div>
   <div class="modal-body">
     <ul class="nav nav-tabs">
       <li class="active"><a href="#signature-request" data-toggle="tab">Signature for this request</a></li>
@@ -424,7 +425,6 @@
       </div><!-- end of signature-request panel //-->
       <div class="tab-pane" id="oauth-setting">
         <form class="form-horizontal" onsubmit="return false;">
-          <div class="infobar" style="width: 85%; margin: 0 auto;"></div>
           <div class="control-group">
             <label class="control-label" for="oauth_signature_method">Signature Methods</label>
             <div class="controls">
@@ -478,16 +478,16 @@
       <input type="checkbox" name="remember"> Remember the setting
     </label>
     <div class="btn-group dropup">
-      <button class="btn btn-success">Insert</button>
+      <button class="btn btn-success save insertHeader" id="insert-oauth">Insert</button>
       <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu pull-right">
-        <li><a href="#">Insert as header</a></li>
-        <li><a href="#">Insert as query string</a></li>
+        <li><a href="#" class="save insertHeader">Insert as header</a></li>
+        <li><a href="#" class="save insertQuery">Insert as query string</a></li>
       </ul>
     </div>
-    <a href="#" class="btn btn-success">Save changes</a>
+    <a href="#" class="btn btn-success save" id="save-oauth">Save changes</a>
     <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
   </div>
 </div>

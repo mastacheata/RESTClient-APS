@@ -35,17 +35,17 @@ restclient.oauth2 = {
     $('#oauth2-authorize [name="templates"]').change(restclient.oauth2.applyTemplate);
     $('#oauth2-tokens [name="saved_tokens"]').change(restclient.oauth2.applyToken);
     
-    $('#window-oauth2 .btnClose').click(restclient.oauth2.closeDialog);
-    $('#window-oauth2 .btnAuthorize').click(restclient.oauth2.authorize);
-    $('#window-oauth2 .btnInsertAsHeader').click(restclient.oauth2.insertAsHeader);
-    $('#window-oauth2 .btnInsertAsQueryString').click(restclient.oauth2.insertAsQueryString);
+    $('#modal-oauth2 .btnClose').click(restclient.oauth2.closeDialog);
+    $('#modal-oauth2 .btnAuthorize').click(restclient.oauth2.authorize);
+    $('#modal-oauth2 .btnInsertAsHeader').click(restclient.oauth2.insertAsHeader);
+    $('#modal-oauth2 .btnInsertAsQueryString').click(restclient.oauth2.insertAsQueryString);
     
-    $('#window-oauth2 .btnSaveTemplate').click(restclient.oauth2.saveTemplate);
-    $('#window-oauth2 .btnRemoveTemplate').click(restclient.oauth2.removeTemplate);
+    $('#modal-oauth2 .btnSaveTemplate').click(restclient.oauth2.saveTemplate);
+    $('#modal-oauth2 .btnRemoveTemplate').click(restclient.oauth2.removeTemplate);
     
-    $('#window-oauth2 .btnSaveToken').click(restclient.oauth2.saveToken);
-    $('#window-oauth2 .btnRemoveToken').click(restclient.oauth2.removeToken);
-    $('#window-oauth2 .btnRefreshToken').click(restclient.oauth2.doRefreshToken);
+    $('#modal-oauth2 .btnSaveToken').click(restclient.oauth2.saveToken);
+    $('#modal-oauth2 .btnRemoveToken').click(restclient.oauth2.removeToken);
+    $('#modal-oauth2 .btnRefreshToken').click(restclient.oauth2.doRefreshToken);
   },
   updateTemplateList: function() {
     $('#oauth2-authorize [name="templates"]').empty();
@@ -73,7 +73,7 @@ restclient.oauth2 = {
     $('#modal-oauth2').modal('show');
   },
   closeDialog: function() {
-    $('#window-oauth2').hide();
+    $('#modal-oauth2').modal('hide');
     restclient.oauth2.listener.param = false;
   },
   insertAsHeader: function() {
@@ -92,7 +92,7 @@ restclient.oauth2 = {
     param.oauth2.tokens = restclient.oauth2.getTokens();
     
     restclient.main.addHttpRequestHeader('Authorization', 'OAuth2 ' + access_token.val(), param);
-    $('#window-oauth2').hide();
+    $('#modal-oauth2').modal('hide');
   },
   insertAsQueryString: function() {
     var access_token    = $('#oauth2-tokens [name="access_token"]');
@@ -104,7 +104,7 @@ restclient.oauth2 = {
     }
     var url = $('#request-url').val();
     $('#request-url').val(restclient.helper.setParam(url, 'access_token', access_token.val()));
-    $('#window-oauth2').hide();
+    $('#modal-oauth2').modal('hide');
   },
   getAuthorize: function() {
     var response_type           = $('#oauth2-authorize [name="response_type"]'),
@@ -235,9 +235,9 @@ restclient.oauth2 = {
       restclient.oauth2.updateTokenList();
       $('#modal-oauth2-save').modal('hide');
     });
-    $('#window-oauth2').hide();
+    $('#modal-oauth2').modal('hide');
     
-    $('#modal-oauth2-save').modal('show').on('hidden', function(){ $('#window-oauth2').show(); });
+    $('#modal-oauth2-save').modal('show').on('hidden', function(){ $('#modal-oauth2').show(); });
   },
   removeToken: function() {
     var template = $('#oauth2-tokens [name="saved_tokens"]');
@@ -314,9 +314,9 @@ restclient.oauth2 = {
       restclient.oauth2.updateTemplateList();
       $('#modal-oauth2-save').modal('hide');
     });
-    $('#window-oauth2').hide();
+    $('#modal-oauth2').modal('hide');
     
-    $('#modal-oauth2-save').modal('show').on('hidden', function(){ $('#window-oauth2').show(); });
+    $('#modal-oauth2-save').modal('show').on('hidden', function(){ $('#modal-oauth2').show(); });
   },
   removeTemplate: function() {
     var template = $('#oauth2-authorize [name="templates"]');
@@ -461,7 +461,7 @@ restclient.oauth2 = {
       return false;
     }
     
-    var btnAuthorize = $('#window-oauth2 .btnAuthorize');
+    var btnAuthorize = $('#modal-oauth2 .btnAuthorize');
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('readystatechange', function(event) {
       if (xhr.readyState == 4) {
@@ -488,7 +488,7 @@ restclient.oauth2 = {
           restclient.log(xhr.responseText);
           restclient.log(accessToken);
           restclient.oauth2.setTokens(accessToken);
-          $('#window-oauth2 .nav-tabs li a').eq(1).click();
+          $('#modal-oauth2 .nav-tabs li a').eq(1).click();
           return;
         }
       }
@@ -559,7 +559,7 @@ restclient.oauth2 = {
           restclient.log(xhr.responseText);
           console.error(tokens);
           restclient.oauth2.setTokens(tokens);
-          $('#window-oauth2 .nav-tabs li a').eq(1).click();
+          $('#modal-oauth2 .nav-tabs li a').eq(1).click();
           return;
         }
       }
