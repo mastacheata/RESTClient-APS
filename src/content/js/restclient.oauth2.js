@@ -91,7 +91,7 @@ restclient.oauth2 = {
     param.oauth2.authorize = restclient.oauth2.getAuthorize();
     param.oauth2.tokens = restclient.oauth2.getTokens();
     
-    restclient.main.addHttpRequestHeader('Authorization', 'OAuth2 ' + access_token.val(), param);
+    restclient.main.addHttpRequestHeader('Authorization', 'Bearer ' + access_token.val(), param);
     $('#modal-oauth2').modal('hide');
   },
   insertAsQueryString: function() {
