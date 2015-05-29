@@ -755,8 +755,8 @@ restclient.main = {
           oauth2 = JSON.parse(oauth2);
           restclient.oauth2.setAuthorize(oauth2.authorize);
           restclient.oauth2.setTokens(oauth2.tokens);
-          $('#window-oauth2').show();
-          $('#window-oauth2 .nav-tabs li a').eq(1).click();
+          $('#nodal-oauth2').show();
+          $('#nodal-oauth2 .nav-tabs li a').eq(1).click();
         }catch(e) {}
         return;
       }
@@ -1730,7 +1730,7 @@ restclient.main = {
       autoRealm(true);
     }
     
-    $('#oauth-setting .btnOkay').click(function () {
+    $('#modal-oauth .save').click(function () {
       
       if (!oauth_realm.hasClass('disabled') 
             && (oauth_realm.val().indexOf('?') > -1 || oauth_realm.val().indexOf('#') > -1))
@@ -1751,25 +1751,12 @@ restclient.main = {
       param.oauth_realm             = oauth_realm.val();
       
       restclient.setPref('OAuth.setting', JSON.stringify(param));
-      
-      var message = restclient.message.show({
-        id: 'alert-oauth-setting-saved',
-        parent: $('#oauth-setting .infobar'),
-        exclude: true,
-        type: 'message',
-        title: 'OAuth settings saved!',
-        message: 'Your OAuth settings have been successfully saved. Enjoy.',
-        buttons: [
-          {title: 'Close', class: 'btn-danger', 'timeout': 5000, callback: function () { $('#alert-oauth-setting-saved').alert('close'); }}
-        ]
-      });
     });
 
     disable_oauth_realm.click(disableRealm);
     auto_oauth_realm.click(autoRealm);
     auto_oauth_timestamp.click(autoTimeStamp);
     auto_oauth_nonce.click(autoNonce);
-
 
     //Load oauth keys from preferences
     var sign_consumer_key         = $('#signature-request [name="consumer_key"]'),
@@ -1793,7 +1780,7 @@ restclient.main = {
       (sign.remember === true) ? sign_remember.attr('checked', true) : sign_remember.removeAttr('checked');
     }
 
-    $('#signature-request .btnInsertAsHeader').bind('click', restclient.main.oauthSign);
+    $('#modal-oauth .save').bind('click', restclient.main.oauthSign);
   },
   oauthSign: function () {
     var sign_consumer_key         = $('#signature-request [name="consumer_key"]'),
@@ -1811,10 +1798,14 @@ restclient.main = {
         auto_oauth_realm          = $('#oauth-setting [name="auto_oauth_realm"]'),
         oauth_realm               = $('#oauth-setting [name="oauth_realm"]'),
         disable_oauth_realm       = $('#oauth-setting [name="disable_oauth_realm"]'),
-            
-        sign_okay                 = $('#signature-request .btnOkay'),
+
+        btn                       = $(this),
 
         errors = [];
+
+    if (!btn.hasClass('btn-success')) {
+        btn = $('#insert-oauth');
+    }
 
     if (sign_consumer_key.val() == '') {
       sign_consumer_key.parents('.control-group').addClass('error');
@@ -1838,7 +1829,7 @@ restclient.main = {
       $('#signature-request .error-info').hide();
     }
 
-    sign_okay.button('loading');
+    btn.button('loading');
     
     if (sign_remember.attr('checked') == 'checked') {
       var setting = {
@@ -1916,34 +1907,88 @@ restclient.main = {
       else
         param.realm = oauth_realm.val();
     }
-    //console.warn(param);
-    var headerId = restclient.main.addHttpRequestHeader('Authorization', headerValue, param);
-    //restclient.log('header id of oauth header: ' + headerId);
+
     $('#window-oauth').css('display', 'none');
 
-    if (restclient.getPref('sign-warning', '') == '')
-      var message = restclient.message.show({
-        id: 'alert-oauth-sign',
-        type: 'warning',
-        class: 'span5 offset3',
-        title: 'Notice',
-        message: 'Do you want RESTClient to refresh OAuth signature before sending your request?',
-        buttons: [
-          [
-            {title: 'Yes, please', class: 'btn-danger', callback: function () { restclient.main.setOAuthAutoRefresh(headerId, true); $('#alert-oauth-sign').alert('close'); }},
-            {title: 'Yes, and please remember my descision', callback: function () { restclient.main.setOAuthAutoRefresh(headerId, true); restclient.setPref('OAuth.refresh', "yes");  restclient.setPref('sign-warning', 'false'); $('#alert-oauth-sign').alert('close');}}
-          ],
-          [
-            {title: 'No, thanks', class: 'btn-warning', callback: function () { restclient.main.setOAuthAutoRefresh(headerId, false); $('#alert-oauth-sign').alert('close'); }},
-            {title: 'No, and please don\'t remind me again', callback: function () { restclient.main.setOAuthAutoRefresh(headerId, false); restclient.setPref('OAuth.refresh', "no"); restclient.setPref('sign-warning', 'false'); $('#alert-oauth-sign').alert('close'); }}
-          ]
-        ]
-      });
-    else
+    if ($(this).hasClass('insertHeader'))
     {
-      var autoRefresh = restclient.getPref('OAuth.refresh', "yes");
-      restclient.main.setOAuthAutoRefresh(headerId, (autoRefresh === 'yes'));
+      //console.warn(param);
+      var headerId = restclient.main.addHttpRequestHeader('Authorization', headerValue, param);
+      //restclient.log('header id of oauth header: ' + headerId);
+
+      if (restclient.getPref('sign-warning', '') == '') {
+        var message = restclient.message.show({
+          id: 'alert-oauth-sign',
+          type: 'warning',
+          class: 'span5 offset3',
+          title: 'Notice',
+          message: 'Do you want RESTClient to refresh OAuth signature before sending your request?',
+          buttons: [
+            [
+              {
+                title: 'Yes, please', class: 'btn-danger', callback: function () {
+                  restclient.main.setOAuthAutoRefresh(headerId, true);
+                  $('#alert-oauth-sign').alert('close');
+                }
+              },
+              {
+                title: 'Yes, and please remember my descision', callback: function () {
+                  restclient.main.setOAuthAutoRefresh(headerId, true);
+                  restclient.setPref('OAuth.refresh', "yes");
+                  restclient.setPref('sign-warning', 'false');
+                  $('#alert-oauth-sign').alert('close');
+                }
+              }
+            ],
+            [
+              {
+                title: 'No, thanks', class: 'btn-warning', callback: function () {
+                  restclient.main.setOAuthAutoRefresh(headerId, false);
+                  $('#alert-oauth-sign').alert('close');
+                }
+              },
+              {
+                title: 'No, and please don\'t remind me again', callback: function () {
+                  restclient.main.setOAuthAutoRefresh(headerId, false);
+                  restclient.setPref('OAuth.refresh', "no");
+                  restclient.setPref('sign-warning', 'false');
+                  $('#alert-oauth-sign').alert('close');
+                }
+              }
+            ]
+          ]
+        });
+      }
+      else {
+        var autoRefresh = restclient.getPref('OAuth.refresh', "yes");
+        restclient.main.setOAuthAutoRefresh(headerId, (autoRefresh === 'yes'));
+      }
     }
+    else {
+      var signatureString = restclient.oauth.normalizeToString(),
+          requestUrl = $('#request-url'),
+          newRequestString = requestUrl.val().contains('?') ? '&' : '?';
+
+      newRequestString += signatureString;
+
+      requestUrl.val(requestUrl.val() + newRequestString);
+    }
+
+
+    var message = restclient.message.show({
+      id: 'alert-oauth-setting-saved',
+      parent: $('#modal-oauth .infobar'),
+      class: 'alert-success',
+      exclude: true,
+      type: 'message',
+      title: 'OAuth settings saved!',
+      message: 'Your OAuth settings have been successfully saved. Enjoy.',
+      buttons: [
+        {title: 'Close', class: 'btn-danger', 'timeout': 5000, callback: function () {$('#alert-oauth-setting-saved').alert('close'); }}
+      ]
+    });
+
+    btn.button('reset');
   },
   setOAuthAutoRefresh: function (headerId, auto) {
     $('[data-header-id="' + headerId + '"]').attr('auto-refresh', (auto) ? "yes" : "no");
