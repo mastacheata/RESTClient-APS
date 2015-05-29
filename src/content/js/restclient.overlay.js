@@ -115,8 +115,9 @@ restclient.overlay = {
       });      
       restclient.sqlite.db.executeSimpleSQL('DELETE FROM history');
       restclient.sqlite.close();
+      restclient.overlay.upgrades['< 1.3']();
     },
-    '> 0': function() {
+    '< 1.3': function() {
       restclient.setPref('skin', restclient.getPref('defaultSkin', 'cerulean'));
       restclient.deletePref('defaultSkin');
     }
