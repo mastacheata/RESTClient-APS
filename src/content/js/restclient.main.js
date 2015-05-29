@@ -1610,7 +1610,7 @@ restclient.main = {
     } else
       eParams.val('1');
     if (queryObject.apsMode)
-      eAPSMode.filter('[value="2"]').prop('checked', true);        
+      eAPSMode.filter('[value="2"]').prop('checked', true);
     $('#request-url').change(function() {
       if (this.value && this.validity.valid) {
         var oldHost = a.hostname;
@@ -1630,6 +1630,11 @@ restclient.main = {
       restclient.aps.apiCallBody = method[1];
       restclient.aps.lastFetch = null;
     }).change();
+    if (queryObject.apsToken) {
+      eToken.val(queryObject.apsToken);
+      restclient.aps.lastFetch = moment();
+      restclient.aps.showMsg('Token was taken from active tab!');
+    }
     eParams.change(function() {
       restclient.aps.lastFetch = null;
     });
