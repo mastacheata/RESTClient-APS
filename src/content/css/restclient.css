@@ -125,6 +125,21 @@ a { cursor: pointer; }
   text-transform: none;
 }
 
+#autoupdate-menu > a {
+  color: #FFF;
+  animation-name: animCycle;
+  animation-duration:4s;
+  animation-direction:normal;
+  animation-iteration-count:infinite;
+}
+
+@keyframes animCycle {
+  0% {color:#FFF;}
+  25% {color:#4AFA05;}
+  50% {color:#0519FA;}
+  75% {color:#850101;}
+}
+
 /* response section style sheet */
 #response {
   margin-top: 18px;
