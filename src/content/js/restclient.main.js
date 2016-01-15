@@ -779,53 +779,52 @@ restclient.main = {
     $('#modal-custom-header').data('source-header-id', id);
     $('#modal-custom-header').modal('show');
   },
-  addHttpRequestHeader: function (name, value, param) {
+  addHttpRequestHeader: function(name, value, param) {
     if (this.uniqueHeaders.indexOf(name.toLowerCase()) >= 0)
       restclient.main.removeHttpRequestHeaderByName(name);
 
-   var text = name + ": " + value,
-       id   = restclient.helper.sha1(text);
+    var text = name + ": " + value,
+      id = restclient.helper.sha1(text);
+    if (text.length > restclient.main.headerLabelMaxLength)
+      text = text.substr(0, restclient.main.headerLabelMaxLength - 3) + "...";
 
-   if (text.length > restclient.main.headerLabelMaxLength)
-     text = text.substr(0, restclient.main.headerLabelMaxLength - 3) + "...";
-
-   var tag = $('<span />').addClass('label').text(text).attr('data-header-id', id)
-              .attr("title", name + ": " + value)
-              .attr('header-name', name)
-              .attr('header-value', value)
-              .append($('<a />').addClass('close').text('×').bind('click', restclient.main.removeHttpRequestHeader));
+    var tag = $('<span />').addClass('label').append('<span>' + text + '<span/>').attr('data-header-id', id)
+      .attr('title', name + ': ' + value)
+      .attr('header-name', name)
+      .attr('header-value', value)
+      .append($('<a />').addClass('close').text('×').bind('click', restclient.main.removeHttpRequestHeader));
     tag.bind('click', restclient.main.editHttpRequestHeader);
     $('#request-headers .tag').append(tag);
 
     var tr = $('<tr class="headers"></tr>').attr('header-name', name)
-    .attr('header-value', value)
-    .attr('data-header-id', id)
-    .append(
-      $('<td></td>').text(name).bind('click', restclient.main.editHttpRequestHeader)
-    ).append(
-      $('<td></td>').text(value).bind('click', restclient.main.editHttpRequestHeader)
+      .attr('header-value', value)
+      .attr('data-header-id', id)
       .append(
-        $('<input class="btn btn-mini btn-danger hide" style="float:right;" type="button" value="Remove">').bind('click', restclient.main.removeHttpRequestHeader)
-      )
-    );
+        $('<td></td>').text(name).bind('click', restclient.main.editHttpRequestHeader)
+      ).append(
+        $('<td></td>').text(value).bind('click', restclient.main.editHttpRequestHeader)
+        .append(
+          $('<input class="btn btn-mini btn-danger hide" style="float:right;" type="button" value="Remove">').bind('click', restclient.main.removeHttpRequestHeader)
+        )
+      );
 
     $('#request-headers table tbody').append(tr);
 
-    if ( $('#request-headers span.label').length > 0 ) {
+    if ($('#request-headers span.label').length > 0) {
       $('#request-headers').show();
     }
 
     if (param)
-      for(var n in param) {
+      for (var n in param) {
         if (!param.hasOwnProperty(n))
           continue;
         tag.attr(n, (typeof param[n] === 'string') ? param[n] : JSON.stringify(param[n]));
         tr.attr(n, (typeof param[n] === 'string') ? param[n] : JSON.stringify(param[n]));
       }
 
-    $('.table .headers').mouseover(function () {
+    $('.table .headers').mouseover(function() {
       $(this).find('input.btn').show();
-    }).mouseout(function () {
+    }).mouseout(function() {
       $(this).find('input.btn').hide();
     });
     return id;
@@ -841,9 +840,9 @@ restclient.main = {
       var tag = $('span[data-header-id="' + oldId + '"]');
       tag.attr('header-name', name)
       .attr('header-value', value)
-      .attr("title", name + ": " + value)
-      .attr('data-header-id', newId)
-      .text(text);
+      .attr('title', name + ": " + value)
+      .attr('data-header-id', newId);
+      tag.children('span').text(text);
       
       var tr = $('tr[data-header-id="' + oldId + '"]');
       tr.attr('data-header-id', newId)
@@ -866,9 +865,10 @@ restclient.main = {
     }
   },
   addCustomHeader: function () {
-    var remember = $('#modal-custom-header [name="remember"]'),
-        inputName = $('#modal-custom-header [name="name"]'),
-        inputValue = $('#modal-custom-header [name="value"]');
+    var modal = $('#modal-custom-header'),
+        remember = modal.find('[name="remember"]'),
+        inputName = modal.find('[name="name"]'),
+        inputValue = modal.find('[name="value"]');
     
     $('#modal-custom-header .error').removeClass('error');
     $('#modal-custom-header .help-info').hide();
@@ -907,13 +907,14 @@ restclient.main = {
         restclient.main.updateFavoriteHeadersMenu();
       }
     }
-    var oldId = $('#modal-custom-header').data('source-header-id');
+    var oldId = modal.data('source-header-id');
     if (!oldId)
       this.addHttpRequestHeader(inputName.val(), inputValue.val());
     else
       this.replaceHttpRequestHeader(oldId, inputName.val(), inputValue.val());
 
-    $('#modal-custom-header').modal('hide');
+    modal.removeData('source-header-id');
+    modal.modal('hide');
   },
   updateFavoriteHeadersMenu: function () {
     $('ul.headers .favorite').remove();
