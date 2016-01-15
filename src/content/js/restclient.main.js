@@ -148,10 +148,7 @@ restclient.main = {
     restclient.main.triggerTAAutosize(10);
   },
   initEvents: function(){
-    $('#bm-sidebar-inner a.favorite').on('click', restclient.bookmark.toggleFavorite);
     $('#bm-labels span.edit').on('click', restclient.bookmark.clickLabelEdit);
-    $('#bm-sidebar-inner .removeBookmark').on('click', restclient.bookmark.clickRemoveBookmark);
-    $('#bm-sidebar-inner .restore, #bm-sidebar-inner .restoreAPS').on('click', restclient.bookmark.applyRequest);
     $('#bm-sidebar-inner .close').on('click', restclient.bookmark.unload);
     $('#bm-sidebar-inner').bind('scroll', restclient.bookmark.scrollWindow);
     $('#bm-sidebar-inner .bm-top').bind('click', restclient.bookmark.scrollToTop);

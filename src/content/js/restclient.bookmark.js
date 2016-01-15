@@ -214,7 +214,10 @@ restclient.bookmark = {
     restclient.bookmark.cachedRequests = restclient.bookmark.cachedRequests.concat(requests);
     
     var templateHtml = $('#bookmarkRequest').html();
-    var template = _.template(templateHtml, {items: requests});
+    var template = $(_.template(templateHtml, {items: requests}));
+    template.find('a.favorite').on('click', restclient.bookmark.toggleFavorite);
+    template.find('.removeBookmark').on('click', restclient.bookmark.clickRemoveBookmark);
+    template.find('.restore, .restoreAPS').on('click', restclient.bookmark.applyRequest);
     $('.bookmark-requests').append(template);
   },
   toggleFavorite: function(e) {
