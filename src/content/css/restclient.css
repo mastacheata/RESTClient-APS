@@ -127,13 +127,13 @@ a { cursor: pointer; }
 
 #autoupdate-menu > a {
   color: #FFF;
-  animation-name: animCycle;
+  animation-name: update-indicator;
   animation-duration:4s;
   animation-direction:normal;
   animation-iteration-count:infinite;
 }
 
-@keyframes animCycle {
+@keyframes update-indicator {
   0% {color:#FFF;}
   25% {color:#4AFA05;}
   50% {color:#0519FA;}
