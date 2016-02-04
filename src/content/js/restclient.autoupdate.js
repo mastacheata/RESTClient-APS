@@ -31,15 +31,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 restclient.autoupdate = {
   check: function() {
     var xhr = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest),
-      ghUrl = 'https://api.github.com',
+      ghUrl = 'https://github.com',
+      ghApiUrl = 'https://api.github.com',
       currentVersion = restclient.getPref('version'),
       skippedVersion = restclient.getPref('skippedVersion');
 
-    xhr.open('GET', ghUrl + '/gists/7ccf8b58f1c5e55347dd', true);
+    xhr.open('GET', ghApiUrl + '/gists/7ccf8b58f1c5e55347dd', true);
     xhr.onload = function(e) {
       e = e.target;
-      var params = JSON.parse(JSON.parse(e.responseText).files.main.content);
-      xhr.open('GET', ghUrl + '/repos' + params.repository + '/releases/latest', true);
+      var params = JSON.parse(JSON.parse(e.responseText).files.main.content),
+        repository = params.repository;
+      xhr.open('GET', ghApiUrl + '/repos' + repository + '/releases/latest', true);
+      $('a.brand').attr('href', ghUrl + repository);
+      $('a#link-repo').attr('href', ghUrl + repository);
+      $('a#link-docs').attr('href', ghUrl + repository + '/wiki');
+      $('a#link-issues').attr('href', ghUrl + repository + '/issues');
       xhr.onload = function(e) {
         e = e.target;
         var release = JSON.parse(e.responseText),

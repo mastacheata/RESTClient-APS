@@ -12,7 +12,7 @@
             </Description>
         </em:targetApplication>
         <em:name>RESTClient APS</em:name>
-        <em:homepageURL>https://github.com/gear54rus/RESTClient-APS</em:homepageURL>
+        <em:homepageURL>https://github.com/odin-public/RESTClient-APS</em:homepageURL>
         <em:description>RESTClient-APS, modified RESTClient with APS development functionality</em:description>
         <em:creator>Paul Gear; gear54rus@gmail.com</em:creator>
         <em:developer>Chao Zhou; chao@zhou.fr</em:developer>
