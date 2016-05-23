@@ -250,16 +250,16 @@ restclient.sqlite = {
     var uuid = restclient.generateUUID();
     var creationTime = new Date().valueOf();
     requestName = requestName || '';
-    favorite = favorite || 0;
+    favorite = favorite ? 1 : 0;
     labels = labels || [];
     labels = _.uniq(labels);
     var curl = restclient.curl.constructCommand(request),
-        tokenCurl = restclient.curl.constructTokenCommand(request.aps);
-    try{
+      tokenCurl = restclient.curl.constructTokenCommand(request.aps);
+    try {
       var stmt = restclient.sqlite.getStatement('newRequests');
       var params = stmt.newBindingParamsArray(),
-          binding = params.newBindingParams();
-    
+        binding = params.newBindingParams();
+
       binding.bindByName("uuid", uuid);
       binding.bindByName("requestName", requestName);
       binding.bindByName("favorite", favorite);
@@ -270,11 +270,11 @@ restclient.sqlite = {
       binding.bindByName("tokenCurl", tokenCurl);
       binding.bindByName("creationTime", creationTime);
       binding.bindByName("lastAccess", creationTime);
-    
+
       params.addParams(binding);
       stmt.bindParameters(params);
       stmt.execute();
-      
+
       var stmt = restclient.sqlite.getStatement('newLabels');
       for (var i = 0; i < labels.length; i++) {
         var params = stmt.newBindingParamsArray();
@@ -285,10 +285,10 @@ restclient.sqlite = {
         stmt.bindParameters(params);
         stmt.execute();
       }
-    }catch(aError){
+    } catch (aError) {
       restclient.error(aError);
       return false;
-    }finally{
+    } finally {
       stmt.reset();
     }
     request.uuid = uuid;
@@ -662,14 +662,18 @@ restclient.sqlite = {
   
   importRequestFromJSON: function(setting) {
     // version <= 2.0.3
-    if( typeof setting.labels === 'undefined' ) {
-      for(var name in setting) {
-        var request = setting[name],
-            id = restclient.helper.sha1( JSON.stringify(request) );
-        restclient.sqlite.saveRequest(request, name, 1);
-      }
-    }
-    
+    setting = JSON.parse(setting);
+    for(var name in setting) {
+      var request = setting[name],
+          id = restclient.helper.sha1( JSON.stringify(request) );
+      request.aps = request.aps || {
+        type: 'getAccountToken',
+        parameters: '1',
+        mode: 0,
+        url: 'http://127.0.0.1:8440/RPC2'
+      };
+      restclient.sqlite.saveRequest(request, name, 0);
+    }    
   },
   migrateFavoriteRequest: function() {
     var requests = restclient.getPref('savedRequest', '');

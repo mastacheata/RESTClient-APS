@@ -237,7 +237,7 @@ restclient.bookmark = {
         uuid = e.parents('li').attr('data-uuid'),
         request = _.where(restclient.bookmark.cachedRequests, {uuid: uuid});
     if(request.length > 0) {
-      restclient.main.applyRequest(request[0].request, !e.hasClass('restore'));
+      restclient.main.applyRequest(request[0].request, e.hasClass('restoreAPS'));
       restclient.bookmark.unload();
     }
     return false;

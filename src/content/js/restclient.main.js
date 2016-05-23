@@ -1417,10 +1417,12 @@ restclient.main = {
             return;
           }
           restclient.sqlite.importRequestFromJSON(setting);
-        }catch(e) { alert('Cannot import the json file.'); }
+          restclient.main.updateFavoriteRequestMenu();
+          alert('Bookmarks import succeeded!');
+        }catch(e) {
+          alert('Cannot import the json file: ' + e.message + '\n' + e.stack);
+        }
       });
-      restclient.main.updateFavoriteRequestMenu();
-      alert('import requests succeed');
     }
     return false;
   },
