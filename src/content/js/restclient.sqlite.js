@@ -59,6 +59,7 @@ restclient.sqlite = {
     removeLabelByUUID: 'DELETE FROM labels WHERE uuid = :uuid',
     removeLabel: 'DELETE FROM labels WHERE labelName = :labelName',
     
+    getAllRequests: 'SELECT requestName, request FROM requests',
     getRequestsByName: 'SELECT * FROM requests WHERE requestName = :requestName',
     getRequestsByLabels: 'SELECT * FROM requests WHERE uuid IN (SELECT uuid FROM labels WHERE labelName IN (placeholder) group by uuid having count(uuid) = :num) ORDER BY creationTime DESC, lastAccess DESC',
     getRequestByUUID: 'SELECT * FROM requests WHERE uuid = :uuid',
@@ -212,6 +213,20 @@ restclient.sqlite = {
       stmt.reset();
     }
     return true;
+  },
+  getAllRequests: function() {
+    var stmt = restclient.sqlite.getStatement('getAllRequests');
+    var requests = {};
+    try {
+      while (stmt.executeStep()) {
+        requests[stmt.row.requestName] = stmt.row.request;
+      }
+    } catch (aError) {
+      return false;
+    } finally {
+      stmt.reset();
+    }
+    return requests;
   },
   getRequestByName: function(requestName) {
     if(typeof requestName !== 'string' || requestName === '')

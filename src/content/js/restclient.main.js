@@ -1427,9 +1427,15 @@ restclient.main = {
     return false;
   },
   exportFavoriteRequests: function () {
-    var savedRequest = restclient.getPref('savedRequest', ''),
+    var bookmarks = restclient.sqlite.getAllRequests(), // not bookmarks, convention calls them 'requests'
         nsIFilePicker = Components.interfaces.nsIFilePicker,
         fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+    if (Object.keys(bookmarks).length === 0) {
+      alert('There are no favorite requests to export');
+      return false;
+    }
+    for (var k in bookmarks)
+      bookmarks[k] = JSON.parse(bookmarks[k]);
     fp.init(window, "Please select a export directory", nsIFilePicker.modeSave);
     fp.appendFilter("JSON","*.json");
     var res = fp.show();
@@ -1444,11 +1450,11 @@ restclient.main = {
           converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].
                       createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
       converter.charset = "UTF-8";
-      var istream = converter.convertToInputStream(savedRequest);
+      var istream = converter.convertToInputStream(JSON.stringify(bookmarks, null, 2));
 
       restclient.NetUtil.asyncCopy(istream, ostream, function (status) {
         if (!Components.isSuccessCode(status)) {
-          alert('Cannot export favorite request.');
+          alert('Cannot export favorite requests');
           return;
         }
       });
