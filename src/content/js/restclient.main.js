@@ -1353,46 +1353,6 @@ restclient.main = {
     $('#request-button').click();
     $('#alertUnOverrideMimeType').alert('close');
   },
-  loadRequest: function () {
-    var nsIFilePicker = Components.interfaces.nsIFilePicker,
-        fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    fp.init(window, "Please select a exported text file to load", nsIFilePicker.modeOpen);
-    fp.appendFilter("Plain text","*.txt");
-    var res = fp.show();
-    if (res == nsIFilePicker.returnOK) {
-      restclient.NetUtil.asyncFetch(fp.file, function (inputStream, status) {
-        if (!Components.isSuccessCode(status)) {
-          alert('Failed to open this request file.');
-          return;
-        }
-
-        var data = restclient.NetUtil.readInputStreamToString(inputStream, inputStream.available());
-
-        var utf8Converter = Components.classes["@mozilla.org/intl/utf8converterservice;1"].
-            getService(Components.interfaces.nsIUTF8ConverterService);
-        var request = utf8Converter.convertURISpecToUTF8(data, "UTF-8");
-        try{
-          if (request == '') {
-            alert('This is an empty file.');
-            return;
-          }
-          request = JSON.parse(request);
-          request.method  = (request.requestMethod) ? request.requestMethod : 'GET';
-          request.url     = (request.requestUrl)    ? request.requestUrl : false;
-          request.body    = (request.requestBody)   ? request.requestBody : false;
-          var headers     = (request.headers && typeof request.headers == 'object')
-                                                    ? request.headers : false;
-          request.headers = [];
-          if (headers)
-            for(var i=0; i < headers.length; i++)
-            {
-              request.headers.push([headers[i], headers[++i]]);
-            }
-          restclient.main.applyRequest(request);
-        }catch(e) { alert('Cannot load this request.'); }
-      });
-    }
-  },
   importFavoriteRequests: function () {
     var nsIFilePicker = Components.interfaces.nsIFilePicker,
         fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
