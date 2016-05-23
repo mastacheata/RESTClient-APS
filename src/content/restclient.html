@@ -357,7 +357,7 @@
           <textarea name="saved-token-curl" rows="5" class="span3" style="resize: vertical;" readonly></textarea>
         </div>
       </div>
-      <div class="control-group">
+      <div class="control-group" style="display:none">
         <label class="control-label" for="saved-request-label">Label</label>
         <div class="controls">
           <input type="text" class="span3" name="saved-request-label" placeholder="Add labels" required />
@@ -756,7 +756,7 @@
   <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.curl %> </span></div>
   <div class="bookmark-details"><span class="bookmark-label">cURL Token Command:</span></div>
   <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.tokenCurl %> </span></div>
-  <div class="bookmark-details labels"><span class="bookmark-label">Labels:</span> 
+  <div class="bookmark-details labels" style="display: none"><span class="bookmark-label">Labels:</span> 
   <% if(item.labels.length == 0) { %>
     <span class="label">uncategorized</span>
   <%
