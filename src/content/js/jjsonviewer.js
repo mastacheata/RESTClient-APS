@@ -121,13 +121,13 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		event.preventDefault();
 		event.stopPropagation();
 		$('.jjson-collapsed').click();
-	}
+	});
 		
 	$(document).on('click', '#jjson-collapse-all', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		$('.jjson-expanded:not(.jjson-collapsed)').click();
-	}
+	});
 
 	JJsonViewer.prototype.defaults = {
 		expanded: true
