@@ -2,7 +2,9 @@ language: node_js
 node_js:
 - node
 script:
-- cd ./src && ./build.sh
+- pushd ./src 
+- ./build.sh 
+- popd
 deploy:
   provider: releases
   api_key:
