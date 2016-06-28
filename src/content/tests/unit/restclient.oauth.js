@@ -21,18 +21,21 @@ $(function () {
         key = "key",
         secret = "secret";
     restclient.oauth.reset();
+    console.log(url);
     var paths = restclient.helper.parseUrl(url),
         param = {'oauth_version': version, 'oauth_nonce': nonce,
                      'oauth_timestamp': timestamp, 'oauth_signature_method': 'HMAC-SHA1'},
         queryString = paths['search'].substring(1);
     param = $.extend(param, restclient.oauth.parseParameterString(queryString));
+    console.log(param);
     var sign = restclient.oauth.sign({
         action: "GET",
         path: paths['hrefNoSearch'],
         signatures: {'consumer_key': key, 'consumer_secret': secret},
         parameters: param
       });
-    ok(sign.signature === '4FhXNzEH2VZZnzydOO3oUv6rpCY%3D');
+    console.log(sign.signature);
+    ok(sign.signature === '4FhXNzEH2VZZnzydOO3oUv6rpCY=');
   })
   
   test("Test sign with querystring", function(){
@@ -56,6 +59,6 @@ $(function () {
         signatures: {'consumer_key': key, 'consumer_secret': secret},
         parameters: param
       });
-    ok(sign.signature === 'DWxlH8SA28rlls7lqhfxoNhA0As%3D', sign.signature);
+    ok(sign.signature === 'DWxlH8SA28rlls7lqhfxoNhA0As=', sign.signature);
   })
 })
