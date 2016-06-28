@@ -45,7 +45,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 			self.prepend('<div class="jjson-error" >' + e.toString() + ' </div>');
 			self.find('.jjson-container').append(self.data('jjson'));
 		}
-		self.append('<div class="jjson-expand-collapse-all"><a href="#" id="jjson-expand-all">[+] Expand all</a>&nnbsp;<a href="#" id="jjson-collapse-all">[-] Collapse all</a></div>');
+		var collapseExpand = '<div id="jjson-expand-collapse-all"><a href="#" id="jjson-expand-all">[+] Expand all</a>&nbsp;<a href="#" id="jjson-collapse-all">[-] Collapse all</a></div>';
+		$(self).parent().append(collapseExpand);
+		$(self).parent().prepend(collapseExpand);
 	}
 
 	function getExpanderClasses(expanded) {

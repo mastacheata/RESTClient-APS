@@ -108,7 +108,14 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     position: static !important;
 }
 
-.jjson-expand-collapse-all > .jjson-expand-all,
-.jjson-expand-collapse-all > .jjson-collapse-all {
-    color: #999;
+#jjson-expand-collapse-all {
+    margin: 3px 0;
+}
+
+#jjson-expand-collapse-all > #jjson-expand-all {
+    color: green !important;
+}
+
+#jjson-expand-collapse-all > #jjson-collapse-all {
+    color: red !important;
 }
