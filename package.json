@@ -1,0 +1,13 @@
+{
+	"name": "RESTClient-APS",
+	"version": "1.8",
+	"license": "bsd-3",
+	"scripts": {
+	  "test": "vows --spec"
+	},
+	"devDependencies": {
+		"gulp-qunit": "~0.2.1",
+		"gulp-util": "~2.2.14",
+		"gulp": "~3.5.1"
+	}
+}
