@@ -107,3 +107,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .jjson-container span {
     position: static !important;
 }
+
+.jjson-expand-collapse-all > .jjson-expand-all,
+.jjson-expand-collapse-all > .jjson-collapse-all {
+    color: #999;
+}

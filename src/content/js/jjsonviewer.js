@@ -45,6 +45,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 			self.prepend('<div class="jjson-error" >' + e.toString() + ' </div>');
 			self.find('.jjson-container').append(self.data('jjson'));
 		}
+		self.append('<div class="jjson-expand-collapse-all"><a href="#" id="jjson-expand-all">[+] Expand all</a>&nnbsp;<a href="#" id="jjson-collapse-all">[-] Collapse all</a></div>');
 	}
 
 	function getExpanderClasses(expanded) {
@@ -72,11 +73,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	}
 
 	function createElement(key, value, type, expanderClasses) {
-		var klass = 'jjson-object',
+		var klass = 'object',
         	open = '{',
         	close = '}';
 		if ($.isArray(value)) {
-			klass = 'jjson-array';
+			klass = 'array';
       		open = '[';
       		close = ']';
 		}
@@ -84,7 +85,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 			return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-null">null</span></li>';
 		}
 		if(type == 'object') {
-			var object = '<li><span class="jjson-'+ expanderClasses +'"></span><span class="jjson-key">"' + encode(key) + '": </span> <span class="jjson-open">' + open + '</span> <ul class="jjson-' + klass + '">';
+			var object = '<li><span class="'+ expanderClasses +'"></span><span class="jjson-key">"' + encode(key) + '": </span> <span class="jjson-open">' + open + '</span> <ul class="jjson-' + klass + '">';
 			object = object + json2html(value, expanderClasses);
 			return object + '</ul><span class="jjson-close">' + close + '</span></li>';
 		}
@@ -98,19 +99,35 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		event.preventDefault();
 		event.stopPropagation();
 		var $self = $(this);
-		$self.parent().find('>ul').slideUp(100, function() {
-			$self.addClass('jjson-collapsed');
-		});
+		if (!$self.parent().parent().hasClass('jjson-container')) {
+			$self.parent().find('>ul').slideUp(100, function() {
+				$self.addClass('jjson-collapsed');
+			});
+		}
 	});
 
 	$(document).on('click', '.jjson-container .jjson-expanded.jjson-collapsed', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var $self = $(this);
-		$self.removeClass('jjson-collapsed').parent().find('>ul').slideDown(100, function() {
-			$self.removeClass('jjson-collapsed').removeClass('jjson-hidden');
-		});
+		if (!$self.parent().parent().hasClass('jjson-container')) {
+			$self.removeClass('jjson-collapsed').parent().find('>ul').slideDown(100, function() {
+				$self.removeClass('jjson-collapsed').removeClass('jjson-hidden');
+			});
+		}
 	});
+
+	$(document).on('click', '#jjson-expand-all', function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		$('.jjson-collapsed').click();
+	}
+		
+	$(document).on('click', '#jjson-collapse-all', function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		$('.jjson-expanded:not(.jjson-collapsed)').click();
+	}
 
 	JJsonViewer.prototype.defaults = {
 		expanded: true
