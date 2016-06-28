@@ -1626,11 +1626,11 @@ restclient.main = {
     function autoRealm(checked) {
       if(typeof checked === 'boolean')
         if(checked)
-          auto_oauth_realm.attr('checked', true);
+          auto_oauth_realm.prop('checked', true);
         else
           auto_oauth_realm.removeAttr('checked');
       
-      if (disable_oauth_realm.attr('checked') !== 'checked' && auto_oauth_realm.attr('checked') !== 'checked') 
+      if (!disable_oauth_realm.prop('checked') && !auto_oauth_realm.prop('checked')) 
         oauth_realm.removeClass('disabled').removeAttr('disabled');
       else 
         oauth_realm.addClass('disabled').attr('disabled', true);
@@ -1642,7 +1642,7 @@ restclient.main = {
         else
           disable_oauth_realm.removeAttr('checked');
           
-      if (disable_oauth_realm.attr('checked') === 'checked')
+      if (disable_oauth_realm.prop('checked'))
         auto_oauth_realm.addClass('disabled').attr('disabled',true);
       else
         auto_oauth_realm.removeClass('disabled').removeAttr('disabled');
@@ -1711,14 +1711,14 @@ restclient.main = {
         return false;
       }
       var param = {};
-      param.auto_oauth_timestamp    = (auto_oauth_timestamp.attr('checked') === 'checked');
+      param.auto_oauth_timestamp    = auto_oauth_timestamp.prop('checked');
       param.oauth_timestamp         = oauth_timestamp.val();
-      param.auto_oauth_nonce        = (auto_oauth_nonce.attr('checked') === 'checked');
+      param.auto_oauth_nonce        = auto_oauth_nonce.prop('checked');
       param.oauth_nonce             = oauth_nonce.val();
       param.oauth_signature_method  = oauth_signature_method.val();
       param.oauth_version           = oauth_version.val();
-      param.auto_oauth_realm        = (auto_oauth_realm.attr('checked') === 'checked');
-      param.disable_oauth_realm     = (disable_oauth_realm.attr('checked') === 'checked');
+      param.auto_oauth_realm        = auto_oauth_realm.prop('checked');
+      param.disable_oauth_realm     = disable_oauth_realm.prop('checked');
       param.oauth_realm             = oauth_realm.val();
       
       restclient.setPref('OAuth.setting', JSON.stringify(param));
@@ -1861,8 +1861,8 @@ restclient.main = {
       signatures: secrets,
       parameters: param
     };
-    if (disable_oauth_realm.attr('checked') !== 'checked') {
-      if(auto_oauth_realm.attr('checked') === 'checked')
+    if (!disable_oauth_realm.prop('checked')) {
+      if(auto_oauth_realm.prop('checked'))
         sign.realm = requestUrl;
       else
         sign.realm = oauth_realm.val();
@@ -1872,8 +1872,8 @@ restclient.main = {
         headerValue = signature.headerString,
         param       = {'oauth-parameters': JSON.stringify(parameters), 'oauth-secrets': JSON.stringify(secrets)};
         
-    if (disable_oauth_realm.attr('checked') !== 'checked') {
-      if(auto_oauth_realm.attr('checked') === 'checked')
+    if (!disable_oauth_realm.prop('checked')) {
+      if(auto_oauth_realm.prop('checked'))
         param['auto-realm'] = true;
       else
         param.realm = oauth_realm.val();
