@@ -81,7 +81,7 @@ restclient.main = {
     $('#request-url').bind('change', restclient.main.updateFavoriteUrlIcon);
     $('#request-body').bind('keyup', restclient.main.requestBodyKeyUP);
     $('#request-history-dropdown-close').bind('click', restclient.main.toggleRequestHistoryPanel);
-    if ($('#overrideMimeType').attr('checked') == 'checked')
+    if ($('#overrideMimeType').prop('checked'))
       $('.overrideMimeType').show();
     
     //TODO 
@@ -705,7 +705,7 @@ restclient.main = {
         strBase64 = btoa(strValue).replace(/.{76}(?=.)/g,'$&\n');
 
     restclient.main.addHttpRequestHeader('Authorization', "Basic " + strBase64);
-    if ( $("#modal-basic-authorization [name='remember']").attr('checked') === 'checked') {
+    if ( $("#modal-basic-authorization [name='remember']").prop('checked')) {
       var basicAuth = JSON.stringify({'user': username.val(), 'pass': password.val()});
       restclient.setPref("basicAuth", basicAuth);
     }
@@ -886,7 +886,7 @@ restclient.main = {
     inputName.next().hide();
     inputValue.next().hide();
 
-    if (remember.attr('checked') == 'checked') {
+    if (remember.prop('checked')) {
       var favoriteHeaders = restclient.getPref('favoriteHeaders', '');
       if (favoriteHeaders == '')
         favoriteHeaders = [];
@@ -949,7 +949,7 @@ restclient.main = {
         request.method = $.trim($('#request-method').val());
         request.url = $.trim($('#request-url').val());
         request.body = $('#request-body').val();
-        request.overrideMimeType = ($('#overrideMimeType').attr('checked') == 'checked') ? $('#overrideMimeType').val() : false;
+        request.overrideMimeType = ($('#overrideMimeType').prop('checked')) ? $('#overrideMimeType').val() : false;
     var headers = [];
     $('#request-headers .label').each(function () {
       headers.push([$(this).attr('header-name'), $(this).attr('header-value')]);
@@ -1109,7 +1109,7 @@ restclient.main = {
   checkMimeType: function () {
     var contentType = this.xhr.getResponseHeader("Content-Type");
     if (contentType && contentType.indexOf('image') >= 0) {
-      if ($('#overrideMimeType').attr('checked') !== 'checked' && restclient.getPref('imageWarning', true))
+      if (!$('#overrideMimeType').prop('checked') && restclient.getPref('imageWarning', true))
         restclient.message.show({
           id: 'alertOverrideMimeType',
           type: 'warning',
@@ -1127,7 +1127,7 @@ restclient.main = {
         });
     }
     else
-      if ($('#overrideMimeType').attr('checked') == 'checked' && restclient.getPref('textMimeWarning', true))
+      if ($('#overrideMimeType').prop('checked') && restclient.getPref('textMimeWarning', true))
         restclient.message.show({
           id: 'alertUnOverrideMimeType',
           type: 'warning',
@@ -1656,7 +1656,7 @@ restclient.main = {
         else
           auto_oauth_timestamp.removeAttr('checked');
           
-      if (auto_oauth_timestamp.attr('checked') == 'checked') {
+      if (auto_oauth_timestamp.prop('checked')) {
         oauth_timestamp.val('').addClass('disabled').attr('disabled',true);
         oauth_timestamp.parent().next().hide();
       }
@@ -1673,7 +1673,7 @@ restclient.main = {
         else
           auto_oauth_nonce.removeAttr('checked');
           
-      if (auto_oauth_nonce.attr('checked') == 'checked') {
+      if (auto_oauth_nonce.prop('checked')) {
         oauth_nonce.val('').addClass('disabled').attr('disabled',true);
       }
       else
@@ -1740,13 +1740,13 @@ restclient.main = {
     if (sign != '') {
       sign = JSON.parse(sign);
       if (sign.consumer_key)
-        sign_consumer_key.val (           sign.consumer_key);
+        sign_consumer_key.val (sign.consumer_key);
       if (sign.consumer_secret)
-        sign_consumer_secret.val (        sign.consumer_secret);
+        sign_consumer_secret.val (sign.consumer_secret);
       if (sign.access_token)
-        sign_access_token.val (           sign.access_token);
+        sign_access_token.val (sign.access_token);
       if (sign.access_token_secret)
-        sign_access_token_secret.val (    sign.access_token_secret);
+        sign_access_token_secret.val (sign.access_token_secret);
       
       (sign.remember === true) ? sign_remember.attr('checked', true) : sign_remember.removeAttr('checked');
     }
@@ -1802,7 +1802,7 @@ restclient.main = {
 
     btn.button('loading');
     
-    if (sign_remember.attr('checked') == 'checked') {
+    if (sign_remember.prop('checked')) {
       var setting = {
         consumer_key        : sign_consumer_key.val(),
         consumer_secret     : sign_consumer_secret.val(),
