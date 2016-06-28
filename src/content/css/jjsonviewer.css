@@ -36,12 +36,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     position: relative;
 }
 
-.jjson-container > li  > .key,
-.jjson-container .array .key {
+.jjson-container > li  > .jjson-key,
+.jjson-container .jjson-array .jjson-key {
     display: none;
 }
 
-.jjson-container .array .object .key {
+.jjson-container .jjson-array .jjson-object .jjson-key {
     display: inline;
 }
 
@@ -53,29 +53,29 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     content: "";
 }
 
-.jjson-container .null {
+.jjson-container .jjson-null {
     color: #999;
 }
-.jjson-container .string {
+.jjson-container .jjson-string {
     color: #4e9a06;
 }
-.jjson-container .number {
+.jjson-container .jjson-number {
     color: #a40000;
 }
-.jjson-container .boolean {
+.jjson-container .jjson-boolean {
     color: #c4a000;
 }
-.jjson-container .key {
+.jjson-container .jjson-key {
     color: #204a87;
 }
 .jjson-error {
     margin: 10px;
     color: rgb(239, 62, 62);
 }
-.jjson-container .expanded {
+.jjson-container .jjson-expanded {
     cursor: pointer;
 }
-.jjson-container .expanded:before {
+.jjson-container .jjson-expanded:before {
     content: "-";
     font-size: 1.2em;
     width: 13px;
@@ -88,19 +88,19 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     top: 3px;
 }
 
-.jjson-container .collapsed:before {
+.jjson-container .jjson-collapsed:before {
     content: "+";
     font-size: 1.1em;
     color: #000;
     top: 1px;
 }
 
-.jjson-container li .collapsed ~ .close:before {
+.jjson-container li .jjson-collapsed ~ .jjson-close:before {
     content: "... ";
     color: #999;
 }
 
-.jjson-container .hidden ~ ul {
+.jjson-container .jjson-hidden ~ ul {
   display: none;
 }
 

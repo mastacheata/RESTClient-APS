@@ -48,8 +48,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	}
 
 	function getExpanderClasses(expanded) {
-		if(!expanded) return 'expanded collapsed hidden';
-		return 'expanded';
+		if(!expanded) return 'jjson-expanded jjson-collapsed jjson-hidden';
+		return 'jjson-expanded';
 	}
 
 	function json2html(json, expanderClasses) {
@@ -72,43 +72,43 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	}
 
 	function createElement(key, value, type, expanderClasses) {
-		var klass = 'object',
+		var klass = 'jjson-object',
         	open = '{',
         	close = '}';
 		if ($.isArray(value)) {
-			klass = 'array';
+			klass = 'jjson-array';
       		open = '[';
       		close = ']';
 		}
 		if(value === null) {
-			return '<li><span class="key">"' + encode(key) + '": </span><span class="null">null</span></li>';
+			return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-null">null</span></li>';
 		}
 		if(type == 'object') {
-			var object = '<li><span class="'+ expanderClasses +'"></span><span class="key">"' + encode(key) + '": </span> <span class="open">' + open + '</span> <ul class="' + klass + '">';
+			var object = '<li><span class="jjson-'+ expanderClasses +'"></span><span class="jjson-key">"' + encode(key) + '": </span> <span class="jjson-open">' + open + '</span> <ul class="jjson-' + klass + '">';
 			object = object + json2html(value, expanderClasses);
-			return object + '</ul><span class="close">' + close + '</span></li>';
+			return object + '</ul><span class="jjson-close">' + close + '</span></li>';
 		}
 		if(type == 'number' || type == 'boolean') {
-			return '<li><span class="key">"' + encode(key) + '": </span><span class="'+ type + '">' + encode(value) + '</span></li>';
+			return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-'+ type + '">' + encode(value) + '</span></li>';
 		}
-		return '<li><span class="key">"' + encode(key) + '": </span><span class="'+ type + '">"' + encode(value) + '"</span></li>';
+		return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-'+ type + '">"' + encode(value) + '"</span></li>';
 	}
 
-	$(document).on('click', '.jjson-container .expanded', function(event) {
+	$(document).on('click', '.jjson-container .jjson-expanded', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var $self = $(this);
 		$self.parent().find('>ul').slideUp(100, function() {
-			$self.addClass('collapsed');
+			$self.addClass('jjson-collapsed');
 		});
 	});
 
-	$(document).on('click', '.jjson-container .expanded.collapsed', function(event) {
+	$(document).on('click', '.jjson-container .jjson-expanded.jjson-collapsed', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var $self = $(this);
-		$self.removeClass('collapsed').parent().find('>ul').slideDown(100, function() {
-			$self.removeClass('collapsed').removeClass('hidden');
+		$self.removeClass('jjson-collapsed').parent().find('>ul').slideDown(100, function() {
+			$self.removeClass('jjson-collapsed').removeClass('jjson-hidden');
 		});
 	});
 
