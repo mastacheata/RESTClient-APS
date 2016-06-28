@@ -1104,7 +1104,7 @@ restclient.main = {
     $('#response-body-highlight pre').text('');
     restclient.main.setResponseHeader();
     $("#response-body-preview div.pre").addClass('overflow');
-    $('#response-body-highlight pre').empty().removeClass('KelpJSONView').addClass('prettyprint linenums');
+    $('#response-body-highlight pre').empty().removeClass('jjson-container').addClass('prettyprint linenums');
   },
   checkMimeType: function () {
     var contentType = this.xhr.getResponseHeader("Content-Type");
@@ -1251,7 +1251,7 @@ restclient.main = {
       reformatted = JSON.stringify(JSON.parse(responseData), null, "  ");
     }catch(e) {}
     $('#response-body-highlight pre').empty().removeClass('prettyprint linenums');
-    $.JSONView(reformatted, $('#response-body-highlight pre'));
+    $('#response-body-highlight pre').jJsonViewer(reformatted);
     //$('#response-body-highlight pre').text(reformatted);
     $("#response-body-preview div.pre").removeClass('overflow').append($('<textarea></textarea>').text(reformatted));
   },
