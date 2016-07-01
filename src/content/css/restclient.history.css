@@ -1,82 +1,48 @@
-#bm-labels .label {
-  font-size: 14px;
-  cursor: pointer;
-}
-#bm-labels span.edit {
-  font-size: 14px;
-  color: #999;
-  cursor: pointer;
-}
-#bm-labels .label-div{
-  display: inline-block;
-  margin-right: 5px;
-  margin-bottom: 10px;
-}
-#bm-labels .label-div .remove {
-  margin-left: 5px;
-  margin-right: 3px;
-  cursor: pointer;
-}
-#bm-requests {
+#history-requests {
   font-size: 14px;
   line-height: 12px;
 }
-#bm-requests .requestNum {
+#history-requests .requestNum {
   vertical-align: top;
   font-size: 12px;
   margin-left: -5px;
 }
-#bm-requests ul{
+#history-requests ul{
   margin-left: 0px;
 }
-#bm-requests ul li
+#history-requests ul li
 {
   list-style-type: none;
   margin-bottom: 15px;
   padding: 10px 19px;
 }
-#bm-requests .loading {
+#history-requests .loading {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
-#bm-requests .bookmark-button {
+/*#history-requests .bookmark-button {
   float: right;
 }
-#bm-requests div.bookmark-title {
+#history-requests div.bookmark-title {
   font-size: 16px;
 }
-#bm-requests div.bookmark-details {
+#history-requests div.bookmark-details {
   margin: 5px 0;
-}
-#bm-requests div.curl {
+}*/
+#history-requests div.curl {
   overflow: auto;
   margin-left: 30px;
 }
-#bm-requests span.bookmark-label {
-  text-align: left;
-  font-weight:bold;
-}
-#bm-requests .lastAccess {
+#history-requests .lastAccess {
   font-size: 11px;
   color: #666;
 }
-#bm-requests .bookmark-details .label {
-  padding: 0px 8px;
-  line-height: 20px;
-  font-size: 12px;
-  background-color: #ddd;
-  color: #333;
-  text-shadow: 0px -1px 0px rgba(1, 1, 1, 0.05);
-}
-#bm-requests .labels {
-  margin-top: 12px !important
-}
-#bm-footer .backtotop {
+#history-footer .backtotop {
   width: 100%;
   text-align: right;
 }
-#bookmark-sidebar {
+#history-sidebar {
   background-color:rgba(0, 0, 0, 0.2);
   z-index:1038;
   position: fixed;
@@ -87,7 +53,7 @@
   opacity: 1;
   overflow: none;
 }
-#bm-sidebar-inner {
+#history-sidebar-inner {
   position: absolute;
   top: 0;
   left: 50%;
@@ -101,7 +67,7 @@
   overflow: scroll;
 }
 
-.bookmark-sidebar-scrollbar {
+.history-sidebar-scrollbar {
   position: absolute;
   height: 100%;
   width: 15px;
@@ -110,7 +76,7 @@
   z-index: 1039;
   overflow: none;
 }
-.bookmark-sidebar-scrollbar .scrollbg {
+.history-sidebar-scrollbar .scrollbg {
   position: absolute;
   top: 0;
   right: 0;
@@ -119,7 +85,7 @@
   z-index: 1;
   background: url(chrome://restclient/content/images/scrollbarbg.gif) repeat-y
 }
-.bookmark-sidebar-scrollbar .scrollbar-slider {
+.history-sidebar-scrollbar .scrollbar-slider {
   position: absolute;
   display: block;
   padding-bottom: 4px;
@@ -131,13 +97,13 @@
   z-index: 2;
   background: url(chrome://restclient/content/images/scrollbarbottom.gif) 50% bottom no-repeat #c2c2c2
 }
-.bookmark-sidebar-scrollbar .scrollbar-slider .ss-top {
+.history-sidebar-scrollbar .scrollbar-slider .ss-top {
   height: 4px;
   background: url(chrome://restclient/content/images/scrollbartop.gif) 50% top no-repeat #c2c2c2
 }
-.bookmark-sidebar-scrollbar .scrollbar-slider:hover {
+.history-sidebar-scrollbar .scrollbar-slider:hover {
   background: url(chrome://restclient/content/images/scrollbarbottomh.gif) 50% bottom no-repeat #aeaeae
 }
-.bookmark-sidebar-scrollbar .scrollbar-slider:hover .ss-top {
+.history-sidebar-scrollbar .scrollbar-slider:hover .ss-top {
   background: url(chrome://restclient/content/images/scrollbartoph.gif) 50% top no-repeat #aeaeae
 }
