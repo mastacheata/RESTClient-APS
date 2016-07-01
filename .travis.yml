@@ -14,3 +14,4 @@ deploy:
   on:
     repo: mastacheata/RESTClient-APS
     branch: develop
+    tags: true
