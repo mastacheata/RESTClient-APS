@@ -152,6 +152,10 @@ restclient.main = {
     $('#bm-sidebar-inner .close').on('click', restclient.bookmark.unload);
     $('#bm-sidebar-inner').bind('scroll', restclient.bookmark.scrollWindow);
     $('#bm-sidebar-inner .bm-top').bind('click', restclient.bookmark.scrollToTop);
+
+    $('#history-sidebar-inner .close').on('click', restclient.history.unload);
+    $('#history-sidebar-inner').bind('scroll', restclient.history.scrollWindow);
+    $('#history-sidebar-inner .history-top').bind('click', restclient.history.scrollToTop);
   },
   unload: function() {
     restclient.sqlite.close();
@@ -1423,6 +1427,9 @@ restclient.main = {
   },
   manageFavoriteRequests: function () {
       restclient.bookmark.init();
+  },
+  manageHistoryRequests: function () {
+      restclient.history.init();
   },
   getFavoriteRequestHtml: function (id, name, request) {
     var group = $('<div class="accordion-group"></div>'),

@@ -52,6 +52,9 @@ restclient.sqlite = {
     updateHistory: 'UPDATE history SET lastAccess = :lastAccess WHERE requestId = :requestId',
     newHistory: 'INSERT INTO history (requestId, request, lastAccess) VALUES (:requestId, :request, :lastAccess)',
     removeHistory: 'DELETE FROM history WHERE lastAccess < :lastAccess',
+    removeHistoryItem: 'DELETE FROM history WHERE requestId = :requestId',
+    countHistory: 'SELECT count(requestId) as sum FROM history ORDER BY lastAccess DESC',
+    findHistory: 'SELECT * FROM history ORDER BY lastAccess DESC',
     
     getLabels: 'SELECT count(labelName) as sum,labelName FROM labels GROUP BY labelName ORDER BY labelName',
     getLabelsByUUID: 'SELECT labelName FROM labels WHERE uuid = :uuid ORDER BY labelName',
@@ -213,6 +216,75 @@ restclient.sqlite = {
       stmt.reset();
     }
     return true;
+  },
+  removeHistoryItem: function(requestId){
+    if(typeof requestId !== 'string' || requestId === '')
+      return false;
+    var stmt = restclient.sqlite.getStatement('removeHistoryItem');
+    try{
+      var params = stmt.newBindingParamsArray(),
+          binding = params.newBindingParams();
+    
+      binding.bindByName("requestId", requestId);
+      params.addParams(binding);
+      stmt.bindParameters(params);
+      stmt.execute();
+    }catch(aError){
+      restclient.error(aError);
+      return false;
+    }finally{
+      stmt.reset();
+    }
+    return true;
+  },
+  countHistory: function(){
+    var sql = restclient.sqlite.sql.countHistory;
+
+    var stmt = restclient.sqlite.db.createStatement(sql);
+    try{    
+      var sum = 0;
+      while (stmt.executeStep()) {
+        sum = stmt.row.sum;
+      }
+      
+      stmt.reset();
+      
+      return sum;
+    }catch(aError){
+      restclient.error(aError);
+    }finally{
+      stmt.reset();
+    }
+    return false;
+  },
+  findHistory: function(){
+    var sql = restclient.sqlite.sql.findHistory;
+
+    var stmt = restclient.sqlite.db.createStatement(sql);
+    try{    
+      var historyRequests = [];
+      while (stmt.executeStep()) {
+        var historyRequest = {};
+        historyRequest.requestId = stmt.row.requestId;
+        historyRequest.request = stmt.row.request;
+        var parsedRequest = JSON.parse(historyRequest.request);
+        historyRequest.requestUrl = parsedRequest.url;
+        historyRequest.requestMethod = parsedRequest.method;
+        historyRequest.curl = restclient.curl.constructCommand(parsedRequest),
+        historyRequest.tokenCurl = restclient.curl.constructTokenCommand(parsedRequest.aps);
+        historyRequest.lastAccess = stmt.row.lastAccess;
+        historyRequests.push(historyRequest);
+      }
+      
+      stmt.reset();
+      
+      return historyRequests;
+    }catch(aError){
+      restclient.error(aError);
+    }finally{
+      stmt.reset();
+    }
+    return false;
   },
   getAllRequests: function() {
     var stmt = restclient.sqlite.getStatement('getAllRequests');
