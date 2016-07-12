@@ -15,34 +15,30 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 **/
 
 .jjson-container {
+    list-style: none;
+    counter-reset: jjson;
+    margin-left: 4em;
+    padding-left: 0;
     font-size: 13px;
     line-height: 1.2;
     font-family: monospace;
-    padding-left: 0;
-    margin-left: 20px;
     overflow: auto;
 }
-.jjson-container,
-.jjson-container ul{
-    list-style: none !important;
-}
-.jjson-container ul{
-    padding: 0px !important;
-    padding-left: 20px !important;
-    margin: 0px !important;
+
+.jjson-container ul {
+    list-style:none;
+    counter-reset: none;
 }
 
-.jjson-container li {
-    position: relative;
-}
-
-.jjson-container > li  > .jjson-key,
-.jjson-container .jjson-array .jjson-key {
-    display: none;
-}
-
-.jjson-container .jjson-array .jjson-object .jjson-key {
-    display: inline;
+.jjson-container .jjson-expanded ~ .jjson-close::before,
+.jjson-container li::before {
+    counter-increment: jjson;
+    content: counter(jjson);
+    display: inline-block;
+    width: 3em;
+    position: absolute;
+    left:1.5em;
+    text-align: right;
 }
 
 .jjson-container li:after {
@@ -53,69 +49,103 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     content: "";
 }
 
+.jjson-container > li  > .jjson-key,
+.jjson-container .jjson-array > li > .jjson-key {
+    display: none !important;
+}
+
+.jjson-container .jjson-array .jjson-object .jjson-key {
+    display: inline;
+}
+
 .jjson-container .jjson-null {
     color: #999;
 }
+
 .jjson-container .jjson-string {
     color: #4e9a06;
 }
+
 .jjson-container .jjson-number {
     color: #a40000;
 }
+
 .jjson-container .jjson-boolean {
     color: #c4a000;
 }
+
 .jjson-container .jjson-key {
     color: #204a87;
 }
+
 .jjson-error {
     margin: 10px;
     color: rgb(239, 62, 62);
 }
-.jjson-container .jjson-expanded {
+
+.jjson-container .jjson-expanded,
+.jjson-container .jjson-collapsed {
     cursor: pointer;
 }
+
 .jjson-container .jjson-expanded:before {
     content: "-";
     font-size: 1.2em;
-    width: 13px;
+    width: 1em;
     text-align: center;
     line-height: 13px;
     font-family: sans-serif;
     color: #933;
-    position: absolute;
-    left: -15px;
-    top: 3px;
+    position: relative;
+    left: -0.6em;
 }
 
 .jjson-container .jjson-collapsed:before {
     content: "+";
-    font-size: 1.1em;
+    font-size: 1.2em;
+    width: 1em;
+    text-align: center;
+    line-height: 13px;
+    font-family: sans-serif;
     color: #000;
+    position: relative;
     top: 1px;
+    left: -0.6em;
+}
+
+.jjson-container .jjson-collapsed ~ .jjson-key {
+    position: relative !important;
+    left: -0.4em;
 }
 
 .jjson-container li .jjson-collapsed ~ .jjson-close:before {
     content: "... ";
     color: #999;
+    position: static;
+    left: 0;
 }
 
-.jjson-container .jjson-hidden ~ ul {
-  display: none;
+.jjson-container .jjson-hidden ~ ol {
+    display: none;
 }
 
-.jjson-container span {
-    position: static !important;
+.jjson-expand-collapse-all .jjson-expand-all {
+    color: green;
+}
+
+.jjson-expand-collapse-all .jjson-collapse-all {
+    color: red;
 }
 
 .jjson-expand-collapse-all {
     margin: 3px 0;
 }
 
-.jjson-expand-collapse-all > #jjson-expand-all {
-    color: green !important;
+.jjson-container span {
+    position: static !important;
 }
 
-.jjson-expand-collapse-all > #jjson-collapse-all {
-    color: red !important;
+.jjson-container .jjson-expanded ~ .jjson-open {
+    position: relative !important;
+    left: -0.4em;    
 }

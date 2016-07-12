@@ -19,19 +19,19 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	'use strict';
 
 	$.fn.jJsonViewer = function(jjson, options) {
-    return this.each( function() {
-    	var self = $(this);
-    	if (typeof jjson == 'string') {
-  			self.data('jjson', jjson);
-    	}
-    	else if(typeof jjson == 'object') {
-  			self.data('jjson', JSON.stringify(jjson))
-    	}
-    	else {
-  			self.data('jjson', '');
-    	}
-    	new JJsonViewer(self, options);
-    });
+	return this.each( function() {
+		var self = $(this);
+		if (typeof jjson == 'string') {
+			self.data('jjson', jjson);
+		}
+		else if(typeof jjson == 'object') {
+			self.data('jjson', JSON.stringify(jjson))
+		}
+		else {
+			self.data('jjson', '');
+		}
+		new JJsonViewer(self, options);
+	});
 	};
 
 	function JJsonViewer(self, options) {
@@ -46,7 +46,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 			self.find('.jjson-container').append(self.data('jjson'));
 		}
 		if ($(self).parent().find('.jjson-expand-collapse-all').length === 0) {
-			var collapseExpand = '<div class="jjson-expand-collapse-all"><a href="#" id="jjson-expand-all">[+] Expand all</a>&nbsp;<a href="#" id="jjson-collapse-all">[-] Collapse all</a></div>';
+			var collapseExpand = '<div class="jjson-expand-collapse-all"><a href="#" class="jjson-expand-all">[+] Expand all</a>&nbsp;<a href="#" class="jjson-collapse-all">[-] Collapse all</a></div>';
 			$(self).parent().append(collapseExpand);
 			$(self).parent().prepend(collapseExpand);
 		}
@@ -72,31 +72,28 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		return html;
 	}
 
-	function encode(value) {
-		return $('<div/>').text(value).html();
-	}
-
 	function createElement(key, value, type, expanderClasses) {
 		var klass = 'object',
-        	open = '{',
-        	close = '}';
-		if ($.isArray(value)) {
-			klass = 'array';
-      		open = '[';
-      		close = ']';
-		}
+			open = '{',
+			close = '}';
 		if(value === null) {
-			return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-null">null</span></li>';
+			return '<li><span class="jjson-key">"' + key + '": </span><span class="jjson-null">null</span></li>';
 		}
 		if(type == 'object') {
-			var object = '<li><span class="'+ expanderClasses +'"></span><span class="jjson-key">"' + encode(key) + '": </span> <span class="jjson-open">' + open + '</span> <ul class="jjson-' + klass + '">';
+			if ($.isArray(value)) {
+				klass = 'array';
+				open = '[';
+				close = ']';
+			}
+
+			var object = '<li><span class="'+ expanderClasses +'"></span><span class="jjson-key">"' + key + '": </span> <span class="jjson-open">' + open + '</span> <ul class="jjson-' + klass + '">';
 			object = object + json2html(value, expanderClasses);
 			return object + '</ul><span class="jjson-close">' + close + '</span></li>';
 		}
 		if(type == 'number' || type == 'boolean') {
-			return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-'+ type + '">' + encode(value) + '</span></li>';
+			return '<li><span class="jjson-key">"' + key + '": </span><span class="jjson-'+ type + '">' + value + '</span></li>';
 		}
-		return '<li><span class="jjson-key">"' + encode(key) + '": </span><span class="jjson-'+ type + '">"' + encode(value) + '"</span></li>';
+		return '<li><span class="jjson-key">"' + key + '": </span><span class="jjson-'+ type + '">"' + value + '"</span></li>';
 	}
 
 	$(document).on('click', '.jjson-container .jjson-expanded', function(event) {
@@ -105,29 +102,29 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		var $self = $(this);
 		if (!$self.parent().parent().hasClass('jjson-container')) {
 			$self.parent().find('>ul').slideUp(100, function() {
-				$self.addClass('jjson-collapsed');
+				$self.removeClass('jjson-expanded').addClass('jjson-collapsed');
 			});
 		}
 	});
 
-	$(document).on('click', '.jjson-container .jjson-expanded.jjson-collapsed', function(event) {
+	$(document).on('click', '.jjson-container .jjson-collapsed', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var $self = $(this);
 		if (!$self.parent().parent().hasClass('jjson-container')) {
 			$self.removeClass('jjson-collapsed').parent().find('>ul').slideDown(100, function() {
-				$self.removeClass('jjson-collapsed').removeClass('jjson-hidden');
+				$self.removeClass('jjson-collapsed').removeClass('jjson-hidden').addClass('jjson-expanded');
 			});
 		}
 	});
 
-	$(document).on('click', '#jjson-expand-all', function(event) {
+	$(document).on('click', '.jjson-expand-all', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		$('.jjson-collapsed').click();
 	});
 		
-	$(document).on('click', '#jjson-collapse-all', function(event) {
+	$(document).on('click', '.jjson-collapse-all', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		$('.jjson-expanded:not(.jjson-collapsed)').click();
