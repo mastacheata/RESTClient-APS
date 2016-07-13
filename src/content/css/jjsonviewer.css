@@ -54,6 +54,16 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     display: none !important;
 }
 
+.jjson-container > li > span {
+    cursor: auto !important;
+}
+
+.jjson-container > li > .jjson-collapsed::before,
+.jjson-container > li > .jjson-expanded::before {
+    content: '' !important;
+    left: 0 !important;
+}
+
 .jjson-container .jjson-array .jjson-object .jjson-key {
     display: inline;
 }
