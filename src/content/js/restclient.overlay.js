@@ -124,12 +124,13 @@ restclient.overlay = {
   },
   open: function() {
     var browser = restclient.overlay.getBrowser(),
+      doc = browser.contentDocument,
       query = {};
     try {
-      if (browser.contentDocument.querySelector('script[src^="/pem/common/js/pem.js"]')) {
-        query.url = browser.currentURI.prePath;
+      if (doc.querySelector('script[src^="/pem/common/js/pem.js"]')) { // OA 5,6
         query.apsMode = 1;
-        var frame = browser.contentDocument.defaultView.frames.topFrame;
+        query.url = browser.currentURI.prePath;
+        var frame = doc.defaultView.frames.topFrame;
         if (frame) {
           var element;
           frame = frame.document;
@@ -143,16 +144,23 @@ restclient.overlay = {
               query.apsSubscription = parseInt(match[0], 10);
           }
         }
-        frame = browser.contentDocument.defaultView.frames.mainFrame;
-        if (frame && (frame.eval('typeof aps') === 'object'))
+        frame = doc.defaultView.frames.mainFrame;
+        if (frame && (frame.eval('typeof aps') === 'object') && frame.eval('"token" in aps.context'))
           query.apsToken = frame.eval('aps.context.token');
+      } else if (doc.querySelector('html > body > div#ccp-wrapper > div#ccp-content > script[src^="/aps/2/ui/runtime/client/aps/aps.js"]')) { // OA 7
+        query.apsMode = 1;
+        query.apsAccount = 0; // next gen experience where you can't fetch customer or subscription IDs from the page, way to go! will use 0s to cause error on auto-refresh
+        query.url = browser.currentURI.prePath;
+        var frame = doc.defaultView;
+        if (frame.eval('typeof aps') === 'object')
+          query.apsToken = frame.eval('aps.context._token');
       }
-    } catch(e) {
+    } catch (e) {
       console.error('An error has occurred when trying to extract APS parameters from active tab: ', e);
     }
     query = restclient.helper.createQueryString(query);
     browser.selectedTab = browser.addTab('chrome://restclient/content/restclient.html' + (query ? '?' + query : ''));
   }
 }
-window.addEventListener("load", function(){ restclient.overlay.init();  }, false);
-window.addEventListener("unload", function(){ }, false);
+window.addEventListener("load", function(){ restclient.overlay.init(); }, false);
+window.addEventListener("unload", function(){}, false);
