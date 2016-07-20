@@ -194,25 +194,25 @@ restclient.sqlite = {
     return requestId;
   },
   removeHistory: function(days) {
-    if(typeof days !== 'number')
+    if (typeof days !== 'number')
       days = 30;
     var lastAccess = new Date();
-    lastAccess.setDate(date.getDate() - days);
+    lastAccess.setDate(lastAccess.getDate() - days);
     lastAccess = lastAccess.valueOf();
     var stmt = restclient.sqlite.getStatement('removeHistory');
-    try{
+    try {
       var params = stmt.newBindingParamsArray(),
-          binding = params.newBindingParams();
-      
+        binding = params.newBindingParams();
+
       binding.bindByName("lastAccess", lastAccess);
 
       params.addParams(binding);
       stmt.bindParameters(params);
       stmt.execute();
-    }catch(aError){
+    } catch (aError) {
       restclient.error(aError);
       return false;
-    }finally{
+    } finally {
       stmt.reset();
     }
     return true;

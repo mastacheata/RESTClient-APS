@@ -61,6 +61,8 @@ restclient.main = {
     restclient.init();
     restclient.autoupdate.check();
     restclient.sqlite.open();
+
+    restclient.sqlite.removeHistory();
     
     this.initEvents();
     this.initSkin();
