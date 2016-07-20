@@ -127,6 +127,7 @@ restclient.overlay = {
       doc = browser.contentDocument,
       query = {};
     try {
+      query.apsMode = 0;
       if (doc.querySelector('script[src^="/pem/common/js/pem.js"]')) { // OA 5,6
         query.apsMode = 1;
         query.url = browser.currentURI.prePath;
@@ -136,8 +137,10 @@ restclient.overlay = {
           frame = frame.document;
           if (element = frame.querySelector('#user_name > b')) {
             var match = element.textContent.match(/\(Account ID: (\d+)\)/i);
-            if (match)
+            if (match) {
               query.apsAccount = parseInt(match[1], 10);
+              query.apsMode = 2;
+            }
             element = frame.querySelector('#sel_sub_id > option[selected]');
             match = element.textContent.match(/\d+$/);
             if (match)
@@ -148,8 +151,8 @@ restclient.overlay = {
         if (frame && (frame.eval('typeof aps') === 'object') && frame.eval('"token" in aps.context'))
           query.apsToken = frame.eval('aps.context.token');
       } else if (doc.querySelector('html > body > div#ccp-wrapper > div#ccp-content > script[src^="/aps/2/ui/runtime/client/aps/aps.js"]')) { // OA 7
-        query.apsMode = 1;
-        query.apsAccount = 0; // next gen experience where you can't fetch customer or subscription IDs from the page, way to go! will use 0s to cause error on auto-refresh
+        query.apsMode = 1; // next gen experience where you can't fetch customer or subscription IDs from the NCP page, way to go!  Will pass 0 as account to not lose the only token we have
+        query.apsAccount = 0;
         query.url = browser.currentURI.prePath;
         var frame = doc.defaultView;
         if (frame.eval('typeof aps') === 'object')

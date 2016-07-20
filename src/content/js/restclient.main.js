@@ -1581,8 +1581,6 @@ restclient.main = {
       eParams.val(tokenTypeParams);
     } else
       eParams.val('1');
-    if (queryObject.apsMode)
-      eAPSMode.filter('[value="2"]').prop('checked', true);
     $('#request-url').change(function() {
       if (this.value && this.validity.valid) {
         var oldHost = a.hostname;
@@ -1596,6 +1594,8 @@ restclient.main = {
     eAPSMode.change(function() {
       inputs.attr('disabled', !parseInt(this.value));
     });
+    if ('apsMode' in queryObject && (['0', '1', '2'].indexOf(queryObject.apsMode) !== -1))
+      eAPSMode.filter('[value="' + queryObject.apsMode + '"]').prop('checked', true).trigger('change');
     eTokenType.change(function() {
       var method = restclient.aps.apiMethods[this.value];
       eParams.attr('placeholder', method[0]);
