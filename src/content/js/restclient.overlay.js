@@ -148,15 +148,19 @@ restclient.overlay = {
           }
         }
         frame = doc.defaultView.frames.mainFrame;
-        if (frame && (frame.eval('typeof aps') === 'object') && frame.eval('"token" in aps.context'))
+        if (frame && frame.eval('(typeof aps === "object") && (typeof aps.context === "object") && (typeof aps.context.token === "string")'))
           query.apsToken = frame.eval('aps.context.token');
       } else if (doc.querySelector('html > body > div#ccp-wrapper > div#ccp-content > script[src^="/aps/2/ui/runtime/client/aps/aps.js"]')) { // OA 7
         query.apsMode = 1; // next gen experience where you can't fetch customer or subscription IDs from the NCP page, way to go!  Will pass 0 as account to not lose the only token we have
         query.apsAccount = 0;
         query.url = browser.currentURI.prePath;
         var frame = doc.defaultView;
-        if (frame.eval('typeof aps') === 'object')
+        if (frame.eval('(typeof aps === "object") && (typeof aps.context === "object") && (typeof aps.context._token === "string")'))
           query.apsToken = frame.eval('aps.context._token');
+      } else if (doc.querySelector('div#ccp-login')) { // OA 7 login form
+        query.apsMode = 1;
+        query.apsAccount = 1;
+        query.url = browser.currentURI.prePath;
       }
     } catch (e) {
       console.error('An error has occurred when trying to extract APS parameters from active tab: ', e);
