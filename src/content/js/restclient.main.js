@@ -1535,7 +1535,7 @@ restclient.main = {
     if (restclient.getPref('enableCurl'))
       restclient.main.updateCurlCommand();
     if (aps !== false) {
-      $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').attr('checked', true).trigger('change');
+      $('input[type="radio"][name="aps-mode"][value="' + request.aps.mode + '"]').prop('checked', true).trigger('change');
       $('#oa-api-url').val(request.aps.url);
       $('#oa-api-user').val(request.aps.user);
       $('#oa-api-password').val(request.aps.password);
