@@ -32,34 +32,30 @@
       <nav class="nav-collapse">
         <ul class="nav">
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">History <b class="caret"></b></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Saved Requests <b class="caret"></b></a>
             <ul class="dropdown-menu">
+              <li class="nav-header">History</li>
               <li class="manage-request"><a href="#" onclick="restclient.main.manageHistoryRequests(); return false;">Show History</a></li>
-<!--
+              <!--
 Maybe add History Im-/Export later
               <li class="divider"></li>
               <li class="nav-header">Import/Export</li>
               <li><a href="#" onclick="restclient.main.importHistoryRequests(); return false;">Import Bookmarks</a></li>
               <li><a href="#" onclick="restclient.main.exportHistoryRequests(); return false;">Export Bookmarks</a></li> 
 -->
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Bookmarks <b class="caret"></b></a>
-            <ul class="dropdown-menu">
+              <li class="divider"></li>
+              <li class="nav-header">Bookmarks</li>
               <li><a href="#" onclick="restclient.main.bookmarkRequest(); return false;">Bookmark This Request</a></li>
               <li class="manage-request"><a href="#" onclick="restclient.main.manageFavoriteRequests(); return false;">Show All Bookmarks</a></li>
-              <li class="divider"></li>
-              <li class="nav-header">Import/Export</li>
-              <li><a href="#" onclick="restclient.main.importFavoriteRequests(); return false;">Import Bookmarks</a></li>
               <li><a href="#" onclick="restclient.main.exportFavoriteRequests(); return false;">Export Bookmarks</a></li>
+              <li><a href="#" onclick="restclient.main.importFavoriteRequests(); return false;">Import Bookmarks</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Authentication <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li class="nav-header">HTTP Authentication</li>
-              <li><a onclick="restclient.main.showModal('modal-basic-authorization');">Basic Authentication</a></li>
+              <li class="nav-header">HTTP Auth</li>
+              <li><a onclick="restclient.main.showModal('modal-basic-authorization');">Basic Auth</a></li>
               <li class="hide"><a onclick="restclient.main.showModal('modal-digest-authorization');">Digest Authentication</a></li>
               <li class="divider"></li>
               <li class="nav-header">OAuth Protocol</li>
