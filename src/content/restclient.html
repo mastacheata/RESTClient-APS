@@ -46,7 +46,7 @@ Maybe add History Im-/Export later
               <li class="divider"></li>
               <li class="nav-header">Bookmarks</li>
               <li><a href="#" onclick="restclient.main.bookmarkRequest(); return false;">Bookmark This Request</a></li>
-              <li class="manage-request"><a href="#" onclick="restclient.main.manageFavoriteRequests(); return false;">Show All Bookmarks</a></li>
+              <li class="manage-request"><a href="#" onclick="restclient.main.manageFavoriteRequests(); return false;">Show Bookmarks</a></li>
               <li><a href="#" onclick="restclient.main.exportFavoriteRequests(); return false;">Export Bookmarks</a></li>
               <li><a href="#" onclick="restclient.main.importFavoriteRequests(); return false;">Import Bookmarks</a></li>
             </ul>
@@ -353,18 +353,6 @@ Maybe add History Im-/Export later
         <div class="controls">
           <input type="text" style="width:270px" name="saved-request-name" placeholder="GET request to example.com" required data-provide="typeahead" data-items="4" data-source=""/>
           <p class="help-block hide">Please give this request a name for future usage.</p>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="saved-curl">cURL Command</label>
-        <div class="controls">
-          <textarea name="saved-curl" rows="5" class="span3" style="resize: vertical;" readonly></textarea>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="saved-token-curl">cURL Token Command</label>
-        <div class="controls">
-          <textarea name="saved-token-curl" rows="5" class="span3" style="resize: vertical;" readonly></textarea>
         </div>
       </div>
       <div class="control-group" style="display:none">
@@ -790,10 +778,17 @@ Maybe add History Im-/Export later
     <b class="requestName"><%= item.requestName %></b> <a href="#" class="restore">[Restore]</a> <a href="#" class="restoreAPS">[+APS]</a> <span class="lastAccess"><%= moment.unix(item.lastAccess / 1000).fromNow() %></span>
   </div>
   <div class="bookmark-details"><span class="bookmark-label"><%= item.requestMethod %></span> <span class="bookmark-value"><%= item.requestUrl %></span></div>
+  <div class="bookmark-details"><span class="bookmark-label"><%= item.request.headers.length ? 'Headers:' : 'No headers' %></span>
+  <% for(var j = 0, header; header = item.request.headers[j]; j++) { var headerText = header[0] + ': ' + header[1];%>
+    <div class="bookmark-details indented"><span class="bookmark-value"><%= headerText.length > restclient.main.headerLabelMaxLength ? headerText.slice(0, restclient.main.headerLabelMaxLength - 3) + '...' : headerText %></span></div>
+  <% } %>
+  </div>
+  <div class="bookmark-details"><span class="bookmark-label"><%= item.request.body.length ? 'Body:' : 'No body' %></span></div>
+  <div class="bookmark-details indented"><span class="bookmark-value"><%= item.request.body.length > restclient.main.requestBodyMaxLength ? item.request.body.slice(0, restclient.main.requestBodyMaxLength - 3) + '...' : item.request.body %></span></div>
   <div class="bookmark-details"><span class="bookmark-label">cURL Command:</span></div>
-  <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.curl %> </span></div>
+  <div class="bookmark-details indented"><span class="bookmark-value"> <%- item.curl %> </span></div>
   <div class="bookmark-details"><span class="bookmark-label">cURL Token Command:</span></div>
-  <div class="bookmark-details curl"><span class="bookmark-value"> <%- item.tokenCurl %> </span></div>
+  <div class="bookmark-details indented"><span class="bookmark-value"> <%- item.tokenCurl %> </span></div>
   <div class="bookmark-details labels" style="display: none"><span class="bookmark-label">Labels:</span> 
   <% if(item.labels.length == 0) { %>
     <span class="label">uncategorized</span>

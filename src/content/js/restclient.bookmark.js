@@ -149,9 +149,8 @@ restclient.bookmark = {
       if(reload)
         setTimeout(function() { restclient.bookmark.updateRequests(0); }, 500);
       
-      var requestNum = parseInt($('.requestNum').text());
-      requestNum--;
-      $('.requestNum').text(requestNum);
+      var requestNum = $('#bm-requests .requestNum');
+      requestNum.text(parseInt(requestNum.text()) - 1);
     }
     return false;
   },
@@ -210,6 +209,10 @@ restclient.bookmark = {
     var requests = restclient.sqlite.findRequestsByKeywordAndLabels(keyword, labels, offset);
     if(requests === false)
       return false;
+    requests = requests.map(function(record) {
+      record.request = JSON.parse(record.request);
+      return record;
+    });
 
     restclient.bookmark.cachedRequests = restclient.bookmark.cachedRequests.concat(requests);
     

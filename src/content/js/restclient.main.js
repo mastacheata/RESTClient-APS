@@ -29,6 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "use strict";
 
 restclient.main = {
+  requestBodyMaxLength: 300,
   headerLabelMaxLength: 100,
   headerMenuMaxLength: 100,
   uniqueHeaders: ['authorization'],
@@ -932,7 +933,7 @@ restclient.main = {
       var croppedText = text;
 
       if (text.length > restclient.main.headerMenuMaxLength)
-        croppedText = text.substr(0, restclient.main.headerMenuMaxLength -3) + "...";
+        croppedText = text.substr(0, restclient.main.headerMenuMaxLength - 3) + "...";
       var a = $('<a class="favorite" href="#" title='+text+'></a>').text(croppedText)
         .attr('header-name', header[0])
         .attr('header-value', header[1]);
