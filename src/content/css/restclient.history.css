@@ -21,22 +21,26 @@
   text-align: center;
   margin-bottom: 20px;
 }
-/*#history-requests .bookmark-button {
+#history-requests .history-button {
   float: right;
 }
-#history-requests div.bookmark-title {
+#history-requests div.history-title {
   font-size: 16px;
 }
-#history-requests div.bookmark-details {
+#history-requests div.history-details {
   margin: 5px 0;
-}*/
-#history-requests div.curl {
+}
+#history-requests div.indented {
   overflow: auto;
   margin-left: 30px;
 }
 #history-requests .lastAccess {
   font-size: 11px;
   color: #666;
+}
+#history-requests .history-label {
+  text-align: left;
+  font-weight: bold;
 }
 #history-footer .backtotop {
   width: 100%;

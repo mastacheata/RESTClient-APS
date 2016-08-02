@@ -810,10 +810,17 @@ Maybe add History Im-/Export later
     <b class="requestName"><%= item.requestName %></b> <a href="#" class="restore">[Restore]</a> <a href="#" class="restoreAPS">[+APS]</a> <span class="lastAccess"><%= moment.unix(item.lastAccess / 1000).fromNow() %></span>
   </div>
   <div class="history-details"><span class="history-label"><%= item.requestMethod %></span> <span class="history-value"><%= item.requestUrl %></span></div>
+  <div class="history-details"><span class="history-label"><%= item.request.headers.length ? 'Headers:' : 'No headers' %></span>
+  <% for(var j = 0, header; header = item.request.headers[j]; j++) { var headerText = header[0] + ': ' + header[1];%>
+    <div class="history-details indented"><span class="history-value"><%= headerText.length > restclient.main.headerLabelMaxLength ? headerText.slice(0, restclient.main.headerLabelMaxLength - 3) + '...' : headerText %></span></div>
+  <% } %>
+  </div>
+  <div class="history-details"><span class="history-label"><%= item.request.body.length ? 'Body:' : 'No body' %></span></div>
+  <div class="history-details indented"><span class="history-value"><%= item.request.body.length > restclient.main.requestBodyMaxLength ? item.request.body.slice(0, restclient.main.requestBodyMaxLength - 3) + '...' : item.request.body %></span></div>
   <div class="history-details"><span class="history-label">cURL Command:</span></div>
-  <div class="history-details curl"><span class="history-value"> <%- item.curl %> </span></div>
+  <div class="history-details indented"><span class="history-value"> <%- item.curl %> </span></div>
   <div class="history-details"><span class="history-label">cURL Token Command:</span></div>
-  <div class="history-details curl"><span class="history-value"> <%- item.tokenCurl %> </span></div>
+  <div class="history-details indented"><span class="history-value"> <%- item.tokenCurl %> </span></div>
 </li>
 <% } %>
 </script>

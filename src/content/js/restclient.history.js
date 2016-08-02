@@ -97,6 +97,10 @@ restclient.history = {
     var requests = restclient.sqlite.findHistory();
     if (requests === false)
       return false;
+    requests = requests.map(function(record) {
+      record.request = JSON.parse(record.request);
+      return record;
+    });
 
     restclient.history.cachedRequests = restclient.history.cachedRequests.concat(requests);
     var templateHtml = $('#historyRequest').html();
