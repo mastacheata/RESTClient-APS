@@ -127,7 +127,7 @@ restclient.bookmark = {
     var uuid = $(this).parents('li').attr('data-uuid');
     var ret = restclient.sqlite.removeRequest(uuid);
     if(ret === true) {
-      $(this).parents('li').hide();
+      $(this).parents('li').remove();
       var spans = $(this).parents('li').find('.used-label');
       var reload = false;
       for(var i = 0, span; span = spans[i]; i++)

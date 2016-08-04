@@ -34,7 +34,9 @@ restclient.history = {
   callback: null,
   init: function() {
     restclient.history.updateRequests(0);
-    $('#history-sidebar').show();
+    var sidebar = $('#history-sidebar');
+    sidebar.find('a.clear-history').on('click', restclient.history.clearHistory);
+    sidebar.show();
     var bgColor = $('body').css('background-color');
     $('#history-sidebar-inner').css('background-color', bgColor);
   },
@@ -75,12 +77,17 @@ restclient.history = {
     var requestId = $(this).parents('li').attr('data-requestId');
     var ret = restclient.sqlite.removeHistoryItem(requestId);
     if (ret === true) {
-      $(this).parents('li').hide();
+      $(this).parents('li').remove();
       var requestNum = parseInt($('#history-requests .requestNum').text());
       requestNum--;
       $('#history-requests .requestNum').text(requestNum);
     }
     return false;
+  },
+  clearHistory: function() {
+    restclient.sqlite.clearHistory();
+    $('#history-requests .history-requests').empty();
+    $('#history-requests .requestNum').text(0);
   },
   updateRequests: function(offset) {
     if (typeof offset === 'undefined') {

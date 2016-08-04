@@ -53,6 +53,7 @@ restclient.sqlite = {
     newHistory: 'INSERT INTO history (requestId, request, lastAccess) VALUES (:requestId, :request, :lastAccess)',
     removeHistory: 'DELETE FROM history WHERE lastAccess < :lastAccess',
     removeHistoryItem: 'DELETE FROM history WHERE requestId = :requestId',
+    clearHistory: 'DELETE FROM history',
     countHistory: 'SELECT count(requestId) as sum FROM history ORDER BY lastAccess DESC',
     findHistory: 'SELECT * FROM history ORDER BY lastAccess DESC',
     
@@ -233,6 +234,18 @@ restclient.sqlite = {
       restclient.error(aError);
       return false;
     }finally{
+      stmt.reset();
+    }
+    return true;
+  },
+  clearHistory: function() {
+    var stmt = restclient.sqlite.getStatement('clearHistory');
+    try {
+      stmt.execute();
+    } catch (aError) {
+      restclient.error(aError);
+      return false;
+    } finally {
       stmt.reset();
     }
     return true;
