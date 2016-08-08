@@ -70,7 +70,7 @@ Maybe add History Im-/Export later
               <li class="divider favorite"></li>
               <li><a class="favorite" href="#">Accept</a></li>
               <li class="divider"></li>
-              <li><a href="#" onclick="restclient.main.clearFavoriteHeaders();return false;">Clear Favorite Headers</a></li>
+              <li><a href="#" onclick="if (confirm('[WARNING] This operation cannot be undone. Are you sure you want ALL favorite headers removed?')) restclient.main.clearFavoriteHeaders();return false;">Clear Favorite Headers</a></li>
             </ul>
           </li>
           <li class="dropdown">

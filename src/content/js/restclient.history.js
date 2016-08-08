@@ -34,9 +34,7 @@ restclient.history = {
   callback: null,
   init: function() {
     restclient.history.updateRequests(0);
-    var sidebar = $('#history-sidebar');
-    sidebar.find('a.clear-history').on('click', restclient.history.clearHistory);
-    sidebar.show();
+    $('#history-sidebar').show();
     var bgColor = $('body').css('background-color');
     $('#history-sidebar-inner').css('background-color', bgColor);
   },

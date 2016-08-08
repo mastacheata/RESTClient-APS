@@ -149,13 +149,19 @@ restclient.main = {
     (window.onhashchange = restclient.main.hashChange)();
     restclient.main.triggerTAAutosize(10);
   },
-  initEvents: function(){
+  initEvents: function() {
     $('#bm-labels span.edit').on('click', restclient.bookmark.clickLabelEdit);
     $('#bm-sidebar-inner .close').on('click', restclient.bookmark.unload);
     $('#bm-sidebar-inner').bind('scroll', restclient.bookmark.scrollWindow);
     $('#bm-sidebar-inner .bm-top').bind('click', restclient.bookmark.scrollToTop);
 
     $('#history-sidebar-inner .close').on('click', restclient.history.unload);
+    $('#history-sidebar-inner .clear-history').on('click', function() {
+      if (confirm('[WARNING] This operation cannot be undone. Are you sure you want ALL history entries removed?')) {
+        restclient.history.clearHistory();
+        restclient.history.unload();
+      }
+    });
     $('#history-sidebar-inner').bind('scroll', restclient.history.scrollWindow);
     $('#history-sidebar-inner .history-top').bind('click', restclient.history.scrollToTop);
   },
