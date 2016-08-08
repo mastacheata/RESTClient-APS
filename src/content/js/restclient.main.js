@@ -121,8 +121,7 @@ restclient.main = {
     $('.enable-curl').click(restclient.main.enableCurl);
     $('.toggle-header-layout').click(restclient.main.toggleRequestHeaderLayout);
     $('.toggle-request-timer').click(restclient.main.toggleRequestTimer);
-    $('.toggle-ta-autosize').click(restclient.main.toggleTAAutosize);    
-    $('.clear-cached-requests').click(restclient.main.clearCachedRequests);
+    $('.toggle-ta-autosize').click(restclient.main.toggleTAAutosize);
     $('h4 ~ #curl-command').prev().children('a').click(function () {
       restclient.main.updateCurlCommand();
       restclient.main.showCurl();
@@ -211,7 +210,7 @@ restclient.main = {
       $('#request-headers .tag').hide();
       $('#request-headers .table').show();
       $('.toggle-header-layout').attr('data-layout', 'table');
-      $('.toggle-header-layout').text('List request headers in tag');
+      $('.toggle-header-layout').text('List request headers in tags');
     }
     
     if (requestTimer === true) {
